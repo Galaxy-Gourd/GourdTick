@@ -1,0 +1,21 @@
+{
+    "name": "GG.GourdTick.Tests.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:afbc0cabfa5564f968a043e2e15a562d",
+        "GUID:77ab65696ca644f279627bef5f786c82",
+        "GUID:288e128c024bc4eb5ae1370046c736af"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

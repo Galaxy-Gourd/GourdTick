@@ -1,0 +1,11 @@
+{
+  "name": "com.galaxygourd.gourd_tick",
+  "version": "1.0.0",
+  "displayName": "Gourd Tick",
+  "description": "Ticking system for Unity3D.",
+  "unity": "2019.4",
+  "author": {
+    "name": "Michael Stephens",
+    "email": "mstephens.dev@gmail.com"
+  }
+}
