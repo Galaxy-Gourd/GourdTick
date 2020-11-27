@@ -1,12 +1,12 @@
 namespace GGTick
 {
-    public class TicksetSimulation: TicksetBase<ITickSimulationClient>
+    public class TicksetFixed: TicksetBase
     {
         #region Constructor
 
-        public TicksetSimulation(TicksetConfigData data, TickSimulation t)
+        public TicksetFixed(TicksetConfigData data, TickFixed t)
         {
-            ticksetData = data;
+            TicksetData = data;
             tick = t;
         }
 
@@ -21,8 +21,9 @@ namespace GGTick
         public override void Tick(float delta)
         {
             base.Tick(delta);
-            foreach (ITickSimulationClient obj in _current)
+            foreach (var tickClient in _current)
             {
+                var obj = (ITickFixedClient) tickClient;
                 obj.Tick(delta);
             }
         }

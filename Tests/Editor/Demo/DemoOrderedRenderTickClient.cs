@@ -1,9 +1,9 @@
-using GGInstaller;
+using GGRoot;
 using GGTick;
 
 namespace GGTests.Tick.Demo
 {
-    public class DemoOrderedRenderTickClient : ITickRenderClient
+    public class DemoOrderedRenderTickClient : ITickVariableClient
     {
         #region Data
 
@@ -23,7 +23,7 @@ namespace GGTests.Tick.Demo
         public DemoOrderedRenderTickClient(TicksetConfigData data, int orderedInstance)
         {
             targetOrder = orderedInstance;
-            Core.Tick.Register(this, data);
+            //Core.Tick.Register(this, data);
         }
 
         #endregion Constructor
@@ -31,7 +31,7 @@ namespace GGTests.Tick.Demo
 
         #region Tick
 
-        void ITickRenderClient.Tick(float delta)
+        void ITickVariableClient.Tick(float delta)
         {
             thisOrderedEntryResult = tickOrderCounter;
             tickOrderCounter++;

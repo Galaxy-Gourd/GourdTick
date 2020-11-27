@@ -1,11 +1,11 @@
 {
-  "name": "com.galaxygourd.gourd_tick",
+  "name": "com.galaxygourd.ggsharptick",
   "version": "1.0.0",
-  "displayName": "Gourd Tick",
-  "description": "Ticking system for Unity3D.",
+  "displayName": "GG Sharp Tick",
+  "description": "C# ticking system.",
   "unity": "2019.4",
   "author": {
-    "name": "Michael Stephens",
-    "email": "mstephens.dev@gmail.com"
+    "name": "Galaxy Gourd",
+    "email": "mstephens.dev@gmail.com" 
   }
 }

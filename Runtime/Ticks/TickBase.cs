@@ -2,14 +2,15 @@ using System.Collections.Generic;
 
 namespace GGTick
 {
-    public abstract class TickBase<T> : ITickInstance<T> where T: ITickClient
+    public abstract class TickBase : ITickInstance
     {
         #region Properties
-        
-        public List<TicksetBase<T>> ticksets { get; protected set; }
+
+        public List<ITicksetInstance> ticksets { get; protected set; }
         public uint tickCount { get; private set; }
         public float ticksPerSecond { get; private set; }
-        public string tickLabel { get; protected set; }
+        public string TickName { get; protected set; }
+        public float InterpolationValue { get; internal set; }
 
         #endregion Properties
 
@@ -25,9 +26,9 @@ namespace GGTick
 
         #region Tick
         
-        void ITickInstance<T>.Tick(float delta)
+        void ITickInstance.Tick(float delta)
         {
-            foreach (TicksetBase<T> sim in ticksets)
+            foreach (ITicksetInstance sim in ticksets)
             {
                 sim.Tick(delta);
             }

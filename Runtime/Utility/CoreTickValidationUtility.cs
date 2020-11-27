@@ -21,16 +21,16 @@ namespace GGTick
                     "Core tick system data cannot be null!");
             }
             
-            if (data.renderTicksets == null)
+            if (data.variableTicks == null)
             {
                 throw new NullReferenceException(
-                    "Core tick system render ticksets data cannot be null!");
+                    "Core tick system variable ticks data cannot be null!");
             }
 
-            if (data.simulationTicks == null)
+            if (data.fixedTicks == null)
             {
                 throw new NullReferenceException(
-                    "Core tick system simulation ticks data cannot be null!");
+                    "Core tick system fixed ticks data cannot be null!");
             }
 
             return true;

@@ -4,7 +4,7 @@ namespace GGTests.Tick
 {
     public static class TickSystemConstructionUtility
     {
-        public static float blankSimTickRate = 0.034f;
+        public const float CONST_blankSimTickRate = 0.034f;
         
         #region System Config Data
 
@@ -16,8 +16,8 @@ namespace GGTests.Tick
         {
             CoreTickSystemConfigData data = new CoreTickSystemConfigData
             {
-                renderTicksets = BlankTicksetGroup(), 
-                simulationTicks = BlankSimulationTickDataGroup()
+                variableTicks = BlankVariableTickDataGroup(), 
+                fixedTicks = BlankFixedTickDataGroup()
             };
             return data;
         }
@@ -26,12 +26,12 @@ namespace GGTests.Tick
         /// Returns tick system data with null render tickset values
         /// </summary>
         /// <returns></returns>
-        public static CoreTickSystemConfigData TickSystemDataWithNullRenderTicksets()
+        public static CoreTickSystemConfigData TickSystemDataWithNullRenderTicks()
         {
             CoreTickSystemConfigData data = new CoreTickSystemConfigData
             {
-                renderTicksets = null, 
-                simulationTicks = BlankSimulationTickDataGroup()
+                variableTicks = null, 
+                fixedTicks = BlankFixedTickDataGroup()
             };
             return data;
         }
@@ -44,8 +44,8 @@ namespace GGTests.Tick
         {
             CoreTickSystemConfigData data = new CoreTickSystemConfigData
             {
-                renderTicksets = BlankTicksetGroup(), 
-                simulationTicks = null
+                variableTicks = BlankVariableTickDataGroup(), 
+                fixedTicks = null
             };
             return data;
         }
@@ -53,68 +53,71 @@ namespace GGTests.Tick
         #endregion System Config Data
         
 
-        #region Ticksets
+        #region Variable Ticks
 
-        private static TicksetConfigData[] BlankTicksetGroup()
+        private static TickVariableConfigData[] BlankVariableTickDataGroup()
         {
-            TicksetConfigData [] ticksetGroup =
+            TickVariableConfigData[] testVariableTicks =
             {
-                new TicksetConfigData
-                {
-                    ticksetName = "tickset"
-                }
-            };
-            return ticksetGroup;
-        }
-
-        public static TicksetConfigData TicksetInstance(string name)
-        {
-            return new TicksetConfigData
-            {
-                ticksetName = name
-            };
-        }
-
-        #endregion Ticksets
-
-        
-        #region Simulation Ticks
-
-        private static TickSimulationConfigData[] BlankSimulationTickDataGroup()
-        {
-            TickSimulationConfigData[] testSimulationTicks =
-            {
-                new TickSimulationConfigData
+                new TickVariableConfigData
                 {
                     ticksets = new []
                     {
                         new TicksetConfigData
                         {
-                            ticksetName = "testSimTickset"
+                            ticksetName = "testVarTickset"
                         }
                     },
-                    maxDelta = 0.5f,
-                    tickName = "testSimulationTick",
-                    tickrate = blankSimTickRate
+                    tickName = "testVariableTick",
+                    StepFixed = true
                 }
             };
-            return testSimulationTicks;
+            return testVariableTicks;
         }
 
-        public static TickSimulationConfigData[] SimulationTickDataGroup(
+        #endregion Variable Ticks
+
+        
+        #region Simulation Ticks
+
+        private static TickFixedConfigData[] BlankFixedTickDataGroup()
+        {
+            TickFixedConfigData[] testFixedTicks =
+            {
+                new TickFixedConfigData
+                {
+                    ticksets = new []
+                    {
+                        new TicksetConfigData
+                        {
+                            ticksetName = "testFixedTickset"
+                        }
+                    },
+                    MaxDelta = 0.5f,
+                    tickName = "testFixedTick",
+                    Tickrate = CONST_blankSimTickRate
+                }
+            };
+            return testFixedTicks;
+        }
+
+        public static TickFixedConfigData[] TickFixedDataGroup(
             int tickCount, 
             int ticksetsPerTick,
             float tRate = 0.0334f,
             float tMax = 0.5f)
         {
-            TickSimulationConfigData[] data = new TickSimulationConfigData[tickCount];
+            TickFixedConfigData[] data = new TickFixedConfigData[tickCount];
             for (int i = 0; i < tickCount; i++)
             {
-                TickSimulationConfigData thisTick = new TickSimulationConfigData();
-                thisTick.tickName = "tick_" + i;
-                thisTick.ticksets = new TicksetConfigData[ticksetsPerTick];
-                thisTick.tickrate = tRate;
-                thisTick.maxDelta = tMax;
+                TickFixedConfigData thisTick = new TickFixedConfigData
+                {
+                    tickName = "tick_" + i,
+                    ticksets = new TicksetConfigData[ticksetsPerTick],
+                    Tickrate = tRate,
+                    MaxDelta = tMax
+                };
+                
                 for (int e = 0; e < thisTick.ticksets.Length; e++)
                 {
                     thisTick.ticksets[e] = new TicksetConfigData

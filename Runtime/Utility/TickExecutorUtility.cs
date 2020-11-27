@@ -8,37 +8,40 @@ namespace GGTick
     public static class TickExecutorUtility
     {
         /// <summary>
-        /// Ticks simulation.
+        /// Ticks fixed.
         /// </summary>
         /// <param name="delta">Delta since last tick (seconds).</param>
-        /// <param name="simulationTicks">The simulation ticks on which to execute.</param>
-        public static void ExecuteSimulationTicks(float delta, TickSimulation[] simulationTicks)
+        /// <param name="ticks">The fixed ticks on which to execute.</param>
+        public static void ExecuteFixedTicks(float delta, TickFixed[] ticks)
         {
-            foreach (TickSimulation simTick in simulationTicks)
+            foreach (TickFixed tick in ticks)
             {
-                float tickrate = simTick.configData.tickrate;
-                simTick.accumulator += delta;
-                simTick.accumulator = Math.Min(simTick.accumulator, simTick.configData.maxDelta);
+                float tickrate = tick.configData.Tickrate;
+                tick.accumulator += delta;
+                tick.accumulator = Math.Min(tick.accumulator, tick.configData.MaxDelta);
+                
+                // Set interpolation value
+                tick.InterpolationValue = Math.Min(tick.accumulator / tick.configData.Tickrate, 1);
 
-                while (simTick.accumulator >= tickrate)
+                // If we've accumulated enough time, tick
+                while (tick.accumulator >= tickrate)
                 {
                     // Tick
-                    simTick.accumulator -= tickrate;
-                    ((ITickInstance<ITickSimulationClient>) simTick).Tick(tickrate);
+                    tick.accumulator -= tickrate;
+                    ((ITickInstance) tick).Tick(tickrate);
+                    tick.InterpolationValue = Math.Min(tick.accumulator / tick.configData.Tickrate, 1);
                 }
             }
         }
         
         /// <summary>
-        /// Ticks rendering.
+        /// Ticks variable.
         /// </summary>
         /// <param name="delta">Delta since last tick (seconds).</param>
-        /// <param name="renderTick">The render tick on which to operate.</param>
-        public static void ExecuteRenderTicks(
-            float delta, 
-            ITickInstance<ITickRenderClient> renderTick)
+        /// <param name="tick">The variable tick on which to operate.</param>
+        public static void ExecuteVariableTick(float delta, ITickInstance tick)
         {
-            renderTick.Tick(delta);
+            tick.Tick(delta);
         }
     }
 }

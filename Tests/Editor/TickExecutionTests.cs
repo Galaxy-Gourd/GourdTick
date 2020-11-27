@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using GGInstaller;
+using GGRoot;
 using GGTests.Tick.Demo;
 using NUnit.Framework;
 using GGTick;
@@ -19,26 +19,19 @@ namespace GGTests.Tick
         {
             // Create tick system with render ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
-            coreTickConfigData.renderTicksets = new TicksetConfigData[ticksetCount];
-            for (int i = 0; i < ticksetCount; i++)
-            {
-                coreTickConfigData.renderTicksets[i] = new TicksetConfigData
-                {
-                    ticksetName = i.ToString()
-                };
-            }
-            TickInstaller.InstallTick(coreTickConfigData);
+            TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
             
             // Create clients in order
             DemoOrderedRenderTickClient.tickOrderCounter = 0;
-            DemoOrderedRenderTickClient[] clients = new DemoOrderedRenderTickClient[coreTickConfigData.renderTicksets.Length];
+            DemoOrderedRenderTickClient[] clients = 
+                new DemoOrderedRenderTickClient[coreTickConfigData.variableTicks[0].ticksets.Length];
             for (int i = 0; i < clients.Length; i++)
             {
-                clients[i] = new DemoOrderedRenderTickClient(coreTickConfigData.renderTicksets[i], i);
+                clients[i] = new DemoOrderedRenderTickClient(coreTickConfigData.variableTicks[0].ticksets[i], i);
             }
             
             // Tick
-            Core.Tick.OnUpdate(0.0334f);
+            Core.Tick.DoTick(0.0334f);
             
             // Client tick indices should match their tick keys
             foreach (var c in clients)
@@ -61,24 +54,24 @@ namespace GGTests.Tick
             
             // Construct data with additional simulation ticks/ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
-            coreTickConfigData.simulationTicks =
-                TickSystemConstructionUtility.SimulationTickDataGroup(
+            coreTickConfigData.fixedTicks =
+                TickSystemConstructionUtility.TickFixedDataGroup(
                     ticks, 
                     ticksetsPerTick, 
                     tRate, 
                     tMax);
-            TickInstaller.InstallTick(coreTickConfigData);
+            TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
             
             // Create clients in order
             DemoOrderedSimulationTickClient.tickOrderCounter = 0;
             List<DemoOrderedSimulationTickClient> clients = new List<DemoOrderedSimulationTickClient>();
             int count = 0;
-            for (int i = 0; i < coreTickConfigData.simulationTicks.Length; i++)
+            for (int i = 0; i < coreTickConfigData.fixedTicks.Length; i++)
             {
-                for (int e = 0; e < coreTickConfigData.simulationTicks[i].ticksets.Length; e++)
+                for (int e = 0; e < coreTickConfigData.fixedTicks[i].ticksets.Length; e++)
                 {
                     clients.Add(new DemoOrderedSimulationTickClient(
-                        coreTickConfigData.simulationTicks[i].ticksets[e],
+                        coreTickConfigData.fixedTicks[i].ticksets[e],
                         count));
                     count++;
                 }
@@ -86,7 +79,7 @@ namespace GGTests.Tick
             
             // Tick; make sure the delta is long enough to tick simulation
             float diff = tMax - tRate;
-            Core.Tick.OnUpdate(tMax - (diff / 2));
+            Core.Tick.DoTick(tMax - (diff / 2));
             
             // Client tick indices should match their tick keys
             foreach (var c in clients)
@@ -109,17 +102,17 @@ namespace GGTests.Tick
         {
             // Create new tick core system, override with custom simulation tick
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
-            coreTickConfigData.simulationTicks =
-                TickSystemConstructionUtility.SimulationTickDataGroup(
+            coreTickConfigData.fixedTicks =
+                TickSystemConstructionUtility.TickFixedDataGroup(
                     1, 
                     1, 
                     mockTickrate,
                     float.MaxValue);
-            TickInstaller.InstallTick(coreTickConfigData);
+            TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
 
             // Create simulation tick instance
             DemoSimulationTickClientIntervalsTest simTick = new DemoSimulationTickClientIntervalsTest();
-            Core.Tick.Register(simTick);
+            Core.Tick.Register(simTick, Core.Tick.fixedTicks[0].ticksets[0]);
 
             Random r = new Random();
             float elapsedSinceLastTick = 0;
@@ -127,7 +120,7 @@ namespace GGTests.Tick
             {
                 // Tick
                 float mockDelta = (float)r.NextDouble();
-                Core.Tick.OnUpdate(mockDelta);
+                Core.Tick.DoTick(mockDelta);
                 elapsedSinceLastTick += mockDelta;
                 
                 // Collect target ticks

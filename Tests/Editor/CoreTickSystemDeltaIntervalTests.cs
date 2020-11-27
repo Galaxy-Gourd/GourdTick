@@ -1,5 +1,5 @@
 using System;
-using GGInstaller;
+using GGRoot;
 using NUnit.Framework;
 using GGTick;
 
@@ -17,9 +17,9 @@ namespace GGTests.Tick
         {
             try
             {
-                var _ = TickInstaller.InstallTick
+                var _ = TickSystemTestsInstaller.InstallTickSystem
                     (TickSystemConstructionUtility.BlankCoreTickSystemConfigData());
-                Core.Tick.OnUpdate(interval);
+                Core.Tick.DoTick(interval);
                 Assert.Fail("Invalid tick delta intervals are passing validation.");
             }
             catch (ArgumentOutOfRangeException)
@@ -33,12 +33,12 @@ namespace GGTests.Tick
         [TestCase(5)]
         public void ElapsedTimeIsAccurateGivenValidConstantDeltaIntervals(float interval)
         {
-            var _ = TickInstaller.InstallTick
+            var _ = TickSystemTestsInstaller.InstallTickSystem
                 (TickSystemConstructionUtility.BlankCoreTickSystemConfigData());
             const int tickCount = 50;
             for (int i = 0; i < tickCount; i++)
             {
-                Core.Tick.OnUpdate(interval);
+                Core.Tick.DoTick(interval);
             }
             
             TimeSpan elapsed = TimeSpan.FromSeconds(tickCount * interval);

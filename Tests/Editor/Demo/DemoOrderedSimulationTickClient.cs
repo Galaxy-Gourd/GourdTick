@@ -1,9 +1,9 @@
-using GGInstaller;
+using GGRoot;
 using GGTick;
 
 namespace GGTests.Tick.Demo
 {
-    public class DemoOrderedSimulationTickClient : ITickSimulationClient
+    public class DemoOrderedSimulationTickClient : ITickFixedClient
     {
         #region Data
 
@@ -25,7 +25,7 @@ namespace GGTests.Tick.Demo
             int targetOrder)
         {
             this.targetOrder = targetOrder;
-            Core.Tick.Register(this, data);
+            //Core.Tick.Register(this, data);
         }
 
         #endregion Constructor

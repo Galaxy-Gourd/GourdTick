@@ -5,15 +5,14 @@ namespace GGTick
     /// <summary>
     /// Defines contract for an instance of a TickBase (TickRender or TickSimulation) 
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface ITickInstance<T> where T : ITickClient
+    public interface ITickInstance
     {
         #region Properties
 
         /// <summary>
         /// The ticksets that belong to this tick
         /// </summary>
-        List<TicksetBase<T>> ticksets { get; }
+        List<ITicksetInstance> ticksets { get; }
 
         /// <summary>
         /// How many ticks have been executed thus far.
@@ -28,7 +27,12 @@ namespace GGTick
         /// <summary>
         /// The name of the tick
         /// </summary>
-        string tickLabel { get; }
+        string TickName { get; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        float InterpolationValue { get; }
 
         #endregion Properties
 

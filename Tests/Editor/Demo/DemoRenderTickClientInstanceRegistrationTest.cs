@@ -1,9 +1,9 @@
-using GGInstaller;
+using GGRoot;
 using GGTick;
 
 namespace GGTests.Tick.Demo
 {
-    public class DemoRenderTickClientInstanceRegistrationTest : ITickRenderClient
+    public class DemoRenderTickClientInstanceRegistrationTest : ITickVariableClient
     {
         #region Registration
 
@@ -12,7 +12,7 @@ namespace GGTests.Tick.Demo
         /// </summary>
         public void RegisterTickClient()
         {
-            Core.Tick.Register(this);
+            //Core.Tick.Register(this);
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace GGTests.Tick.Demo
         /// </summary>
         public void UnregisterTickClient()
         {
-            Core.Tick.Unregister(this);
+            //Core.Tick.Unregister(this);
         }
 
         #endregion Registration
@@ -28,7 +28,7 @@ namespace GGTests.Tick.Demo
         
         #region Tick
 
-        void ITickRenderClient.Tick(float delta)
+        void ITickVariableClient.Tick(float delta)
         {
             
         }

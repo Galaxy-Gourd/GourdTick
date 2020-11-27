@@ -2,46 +2,61 @@ using System.Collections.Generic;
 
 namespace GGTick
 {
-    public abstract class TicksetBase<T> : ITicksetInstance where T : ITickClient
+    public abstract class TicksetBase : ITicksetInstance
     {
         #region Variables
 
+        public TickBase tick { get; protected set; }
+        
         // Tickset data
-        protected TicksetConfigData ticksetData;
+        public TicksetConfigData TicksetData { get; protected set; }
 
         /// <summary>
         /// The list of current clients subscribed to this tickset.
         /// </summary>
-        protected readonly List<T> _current = new List<T>();
-        public readonly List<T> stagedForRemoval = new List<T>();
-        public readonly List<T> stagedForAddition = new List<T>();
+        protected readonly List<ITickClient> _current = new List<ITickClient>();
 
         public int subscriberCount { get; private set; }
+
+        public string ticksetName => TicksetData.ticksetName;
         
         /// <summary>
-        /// The tick to which this tickset belongs
+        /// 
         /// </summary>
-        internal TickBase<T> tick { get; set; }
-
-        public string ticksetName => ticksetData.ticksetName;
+        private readonly List<ITickClient> _stagedForAddition = new List<ITickClient>();
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly List<ITickClient> _stagedForRemoval = new List<ITickClient>();
 
         #endregion Variables
-
+        
 
         #region Tick
 
+        void ITicksetInstance.StageForAddition(ITickClient client)
+        {
+            _stagedForAddition.Add(client);
+        }
+
+        void ITicksetInstance.StageForRemoval(ITickClient client)
+        {
+            _stagedForRemoval.Add(client);
+        }
+        
         /// <summary>
         /// 
         /// </summary>
         private void AddStagedTickables()
         {
-            foreach (T t in stagedForAddition)
+            foreach (ITickClient t in _stagedForAddition)
             {
                 _current.Add(t);
             }
 
             subscriberCount = _current.Count;
-            stagedForAddition.Clear();
+            _stagedForAddition.Clear();
         }
 
         /// <summary>
@@ -49,13 +64,13 @@ namespace GGTick
         /// </summary>
         private void FlushStagedTickables()
         {
-            foreach (T t in stagedForRemoval)
+            foreach (ITickClient t in _stagedForRemoval)
             {
                 _current.Remove(t);
             }
 
             subscriberCount = _current.Count;
-            stagedForRemoval.Clear();
+            _stagedForRemoval.Clear();
         }
 
         /// <summary>

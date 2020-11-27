@@ -2,17 +2,17 @@ using System.Collections.Generic;
 
 namespace GGTick
 {
-    public sealed class TickSimulation : TickBase<ITickSimulationClient>
+    public sealed class TickFixed : TickBase
     {
         #region Variables
-        
+
         /// <summary>
         /// The configuration data for this tick
         /// </summary>
-        internal readonly TickSimulationConfigData configData;
+        internal readonly TickFixedConfigData configData;
 
         /// <summary>
-        /// Accumulates delta time and processes correct number of sim ticks in AppTick.
+        /// Accumulates delta time and processes correct number of fixed ticks
         /// </summary>
         internal float accumulator { get; set; }
         
@@ -21,10 +21,10 @@ namespace GGTick
 
         #region Constructor
 
-        public TickSimulation(TickSimulationConfigData data)
+        public TickFixed(TickFixedConfigData data)
         {
             configData = data;
-            tickLabel = data.tickName;
+            TickName = data.tickName;
             SetTicksets(data.ticksets);
         }
 
@@ -39,22 +39,14 @@ namespace GGTick
         /// <param name="ticksetsData">The data from which to create the ticksets.</param>
         private void SetTicksets(IEnumerable<TicksetConfigData> ticksetsData)
         {
-            ticksets = new List<TicksetBase<ITickSimulationClient>>();
+            ticksets = new List<ITicksetInstance>();
             
             // Add explicit ticksets
             foreach (TicksetConfigData tick in ticksetsData)
             {
-                TicksetSimulation t = new TicksetSimulation(tick, this);
+                TicksetFixed t = new TicksetFixed(tick, this);
                 ticksets.Add(t);
             }
-            
-            // Add interpolation tickset last
-            TicksetConfigData interpData = new TicksetConfigData
-            {
-                ticksetName = tickLabel + "_interp"
-            };
-            TicksetSimulation interp = new TicksetSimulation(interpData, this);
-            ticksets.Add(interp);
         }
 
         #endregion Ticksets

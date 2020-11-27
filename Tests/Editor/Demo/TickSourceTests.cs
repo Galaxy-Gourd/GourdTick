@@ -1,8 +1,8 @@
-using GGTick;
+using GGRoot;
 
 namespace GGTests.Tick.Demo
 {
-    public class DemoTickClockSource : CoreTickSource
+    public class TickSourceTests
     {
         /// <summary>
         /// Tests triggering a core system tick with the provided delta.
@@ -10,7 +10,7 @@ namespace GGTests.Tick.Demo
         /// <param name="delta">Time(in seconds) since the previous tick.</param>
         public void TestTick(float delta)
         {
-            Tick(delta);
+            Core.Tick.DoTick(delta, null);
         }
     }
 }

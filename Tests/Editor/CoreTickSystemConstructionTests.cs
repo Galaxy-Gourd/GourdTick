@@ -1,5 +1,5 @@
 using System;
-using GGInstaller;
+using GGRoot;
 using NUnit.Framework;
 using GGTick;
 
@@ -15,7 +15,7 @@ namespace GGTests.Tick
         {
             try
             {
-                var _ = TickInstaller.InstallTick(null);
+                var _ = TickSystemTestsInstaller.InstallTickSystem(null);
                 Assert.Fail("Tick system with null config data is passing validation.");
             }
             catch (NullReferenceException)
@@ -29,8 +29,8 @@ namespace GGTests.Tick
         {
             try
             {
-                var _ = TickInstaller.InstallTick
-                    (TickSystemConstructionUtility.TickSystemDataWithNullRenderTicksets());
+                var _ = TickSystemTestsInstaller.InstallTickSystem
+                    (TickSystemConstructionUtility.TickSystemDataWithNullRenderTicks());
                 Assert.Fail("Tick system with null render tickset data is passing validation.");
             }
             catch (NullReferenceException)
@@ -44,7 +44,7 @@ namespace GGTests.Tick
         {
             try
             {
-                var _ = TickInstaller.InstallTick
+                var _ = TickSystemTestsInstaller.InstallTickSystem
                     (TickSystemConstructionUtility.TickSystemDataWithNullSimulationTicks());
                 Assert.Fail("Tick system with null simulation ticks data is passing validation.");
             }
@@ -66,18 +66,10 @@ namespace GGTests.Tick
         {
             // Construct data with additoinal render ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
-            coreTickConfigData.renderTicksets = new TicksetConfigData[additionalTicksets];
-            for (int i = 0; i < additionalTicksets; i++)
-            {
-                coreTickConfigData.renderTicksets[i] = new TicksetConfigData
-                {
-                    ticksetName = "testTick_" + i
-                };
-            }
-            TickInstaller.InstallTick(coreTickConfigData);
+            TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
             
             // Total render ticksets should be equal to addtional ticksets plus 1 (the default tickset)
-            Assert.AreEqual(additionalTicksets + 1, Core.Tick.renderTick.ticksets.Count,
+            Assert.AreEqual(additionalTicksets + 1, Core.Tick.variableTicks[0].ticksets.Count,
                 "Render tickset count is not correct!");
         }
 
@@ -90,13 +82,13 @@ namespace GGTests.Tick
         {
             // Construct data with additional simulation ticks/ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
-            coreTickConfigData.simulationTicks =
-                TickSystemConstructionUtility.SimulationTickDataGroup(ticks, ticksetsPerTick);
-            TickInstaller.InstallTick(coreTickConfigData);
+            coreTickConfigData.fixedTicks =
+                TickSystemConstructionUtility.TickFixedDataGroup(ticks, ticksetsPerTick);
+            TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
 
             // Total simulation ticksets should be equal to ticks + ticksets per (simulation ticks have no defaults)
             int count = 0;
-            foreach (var tick in Core.Tick.simulationTicks)
+            foreach (var tick in Core.Tick.fixedTicks)
             {
                 count += tick.ticksets.Count;
             }

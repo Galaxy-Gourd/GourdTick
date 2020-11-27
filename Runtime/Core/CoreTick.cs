@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using SharpCore;
+using GGData;
 
 namespace GGTick
 {
@@ -10,13 +9,12 @@ namespace GGTick
     /// <summary>
     /// Implementation of ICoreTick interface
     /// </summary>
-    public class CoreTick : CoreSystemBase<CoreTickSystemConfigData>, ICoreTick
+    public class CoreTick : CoreSystemBase<CoreTickSystemConfigData, ICoreSystemClientTick>, ICoreTick
     {
         #region Properties
-
-        public ITickInstance<ITickRenderClient> renderTick { get; }
-        public ITickInstance<ITickRenderClient> lateRenderTick { get; }
-        public TickSimulation[] simulationTicks { get; }
+        
+        public TickVariable[] variableTicks { get; }
+        public TickFixed[] fixedTicks { get; }
         public TimeSpan elapsedSinceSimStartup { get; private set; }
         
         #endregion Properties
@@ -24,72 +22,48 @@ namespace GGTick
         
         #region Construction
 
-        public CoreTick(CoreTickSystemConfigData data) : base(data)
+        public CoreTick(CoreTickSystemConfigData data, ICoreSystemClientTick systemClient = null)
+            : base(data, systemClient)
         {
             // Make sure we have valid ticking data
             if (!CoreTickValidationUtility.ValidateCoreTickSystemConfigData(data))
                 return;
             
-            // Create default render tick
-            renderTick = new TickRender(data.renderTicksets);
-            
-            // Create late render tick
-            lateRenderTick = new TickRender(data.lateRenderTicksets);
-            
-            // Create simulation ticks and add to lists
-            List<TickSimulation> fixedList = new List<TickSimulation>();
-            foreach (TickSimulationConfigData sim in data.simulationTicks)
+            // Create variable ticks
+            variableTicks = new TickVariable[data.variableTicks.Length];
+            for(int i = 0; i < data.variableTicks.Length; i++)
             {
-                fixedList.Add(new TickSimulation(sim));
+                variableTicks[i] = new TickVariable(data.variableTicks[i]);
             }
-            simulationTicks = fixedList.ToArray();
+            
+            // Create fixed ticks
+            fixedTicks = new TickFixed[data.fixedTicks.Length];
+            for(int i = 0; i < data.fixedTicks.Length; i++)
+            {
+                fixedTicks[i] = new TickFixed(data.fixedTicks[i]);
+            }
         }
- 
+
+        public override void OnPostCoreSystemsInitialization()
+        {
+            base.OnPostCoreSystemsInitialization();
+            
+            _systemClient?.OnSystemTickInitialized(variableTicks, fixedTicks);
+        }
+
         #endregion Construction
 
 
         #region Registration
 
-        void ICoreTick.Register(ITickSimulationClient obj, TicksetConfigData tickset)
+        void ICoreTick.Register(ITickClient obj, ITicksetInstance tickset)
         {
-            TicksetBase<ITickSimulationClient> s = 
-                TicksetMatchUtility.GetSimulationTickset(tickset, simulationTicks);
-            s.stagedForAddition.Add(obj);
-        }
-        
-        void ICoreTick.Register(ITickRenderClient obj, TicksetConfigData tickset)
-        {
-            TicksetBase<ITickRenderClient> s = 
-                TicksetMatchUtility.GetRenderTickset(tickset, renderTick);
-            s.stagedForAddition.Add(obj);
+            tickset?.StageForAddition(obj);
         }
 
-        void ICoreTick.Register(ITickLateRenderClient obj, TicksetConfigData tickset)
+        void ICoreTick.Unregister(ITickClient obj, ITicksetInstance tickset)
         {
-            TicksetBase<ITickRenderClient> s = 
-                TicksetMatchUtility.GetRenderTickset(tickset, lateRenderTick);
-            s.stagedForAddition.Add(obj);
-        }
-
-        void ICoreTick.Unregister(ITickSimulationClient obj, TicksetConfigData tickset)
-        {
-            TicksetBase<ITickSimulationClient> s = 
-                TicksetMatchUtility.GetSimulationTickset(tickset, simulationTicks);
-            s.stagedForRemoval.Add(obj);
-        }
-
-        void ICoreTick.Unregister(ITickRenderClient obj, TicksetConfigData tickset)
-        {
-            TicksetBase<ITickRenderClient> s = 
-                TicksetMatchUtility.GetRenderTickset(tickset, renderTick);
-            s.stagedForRemoval.Add(obj);
-        }
-
-        void ICoreTick.Unregister(ITickLateRenderClient obj, TicksetConfigData tickset)
-        {
-            TicksetBase<ITickRenderClient> s = 
-                TicksetMatchUtility.GetRenderTickset(tickset, lateRenderTick);
-            s.stagedForRemoval.Add(obj);
+            tickset?.StageForRemoval(obj);
         }
 
         #endregion Registration
@@ -97,30 +71,26 @@ namespace GGTick
 
         #region Source
 
-        void ICoreTick.OnUpdate(float delta)
+        void ICoreTick.DoTick(float delta, TickVariable tick)
         {
             // Validate delta data
             if (!CoreTickValidationUtility.ValidateDeltaInterval(delta))
                 return;
-            
-            // Update total elapsed time
-            elapsedSinceSimStartup += TimeSpan.FromSeconds(delta);
-            
-            // Tick simulations
-            TickExecutorUtility.ExecuteSimulationTicks(delta, simulationTicks);
-            
-            // Tick renders
-            TickExecutorUtility.ExecuteRenderTicks(delta, renderTick);
-        }
 
-        void ICoreTick.OnLateUpdate(float delta)
-        {
-            // Validate delta data
-            if (!CoreTickValidationUtility.ValidateDeltaInterval(delta))
-                return;
+            // Null check
+            if (tick == null)
+            {
+                tick = variableTicks[0];
+            }
             
-            // Tick late renders
-            TickExecutorUtility.ExecuteRenderTicks(delta, lateRenderTick);
+            // Are we also ticking fixed step?
+            if (tick.fixedStep)
+            {
+                elapsedSinceSimStartup += TimeSpan.FromSeconds(delta);
+                TickExecutorUtility.ExecuteFixedTicks(delta, fixedTicks);
+            }
+            
+            TickExecutorUtility.ExecuteVariableTick(delta, tick);
         }
 
         #endregion Source

@@ -1,11 +1,10 @@
-using SharpCore.Data;
+using GGData.Data;
 
 namespace GGTick
 {
     public class CoreTickSystemConfigData : CoreSystemData
     {
-        public TicksetConfigData[] renderTicksets;
-        public TicksetConfigData[] lateRenderTicksets;
-        public TickSimulationConfigData[] simulationTicks;
+        public TickVariableConfigData[] variableTicks;
+        public TickFixedConfigData[] fixedTicks;
     }
 }

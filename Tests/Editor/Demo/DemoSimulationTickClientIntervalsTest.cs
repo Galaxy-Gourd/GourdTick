@@ -2,7 +2,7 @@ using GGTick;
 
 namespace GGTests.Tick.Demo
 {
-    public class DemoSimulationTickClientIntervalsTest : ITickSimulationClient
+    public class DemoSimulationTickClientIntervalsTest : ITickFixedClient
     {
         #region Properties
 
@@ -13,7 +13,7 @@ namespace GGTests.Tick.Demo
 
         #region Tick
 
-        void ITickSimulationClient.Tick(float delta)
+        void ITickFixedClient.Tick(float delta)
         {
             ticksSinceLastCheck++;
         }
