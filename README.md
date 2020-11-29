@@ -1,2 +1,2 @@
-# GourdTick
+# SharpTick
 Core GG tick system.
