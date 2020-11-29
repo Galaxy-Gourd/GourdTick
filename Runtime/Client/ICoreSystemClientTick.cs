@@ -1,6 +1,6 @@
-using GGData;
+using GGSharpData;
 
-namespace GGTick
+namespace GGSharpTick
 {
     public interface ICoreSystemClientTick : ICoreSystemClient
     {

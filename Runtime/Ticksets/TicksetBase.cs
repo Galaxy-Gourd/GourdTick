@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GGTick
+namespace GGSharpTick
 {
     public abstract class TicksetBase : ITicksetInstance
     {

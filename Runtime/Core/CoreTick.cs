@@ -1,7 +1,7 @@
 using System;
-using GGData;
+using GGSharpData;
 
-namespace GGTick
+namespace GGSharpTick
 {
     //Inspo from: 
     //https://forum.unity.com/threads/writing-update-manager-what-should-i-know.402571/

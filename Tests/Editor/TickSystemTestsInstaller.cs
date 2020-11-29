@@ -1,14 +1,14 @@
-using GGRoot;
-using GGTick;
+using GGSharpTick;
 
 namespace GGTests.Tick
 {
     public static class TickSystemTestsInstaller
     {
+        public static ICoreTick TestTick;
         public static CoreTick InstallTickSystem(CoreTickSystemConfigData data)
         {
-            Core.Tick = new CoreTick(data);
-            return Core.Tick as CoreTick;
+            TestTick = new CoreTick(data);
+            return TestTick as CoreTick;
         }
     }
 }

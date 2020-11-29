@@ -1,9 +1,8 @@
-using GGRoot;
-using GGTick;
+using GGSharpTick;
 
 namespace GGTests.Tick.Demo
 {
-    public class DemoOrderedRenderTickClient : ITickVariableClient
+    public class DemoOrderedFixedTickClient : ITickFixedClient
     {
         #region Data
 
@@ -11,8 +10,8 @@ namespace GGTests.Tick.Demo
         /// We increment this value every time a render tickset is ticked, giving us a view of the tick order
         /// </summary>
         public static int tickOrderCounter;
-        
-        public int targetOrder { get; }
+
+        public readonly int targetOrder;
         public int thisOrderedEntryResult { get; private set; }
 
         #endregion Data
@@ -20,24 +19,23 @@ namespace GGTests.Tick.Demo
         
         #region Constructor
 
-        public DemoOrderedRenderTickClient(TicksetConfigData data, int orderedInstance)
+        public DemoOrderedFixedTickClient(ITicksetInstance tickset, int targetOrder)
         {
-            targetOrder = orderedInstance;
-            //Core.Tick.Register(this, data);
+            this.targetOrder = targetOrder;
+            TickSystemTestsInstaller.TestTick.Register(this, tickset);
         }
 
         #endregion Constructor
-
-
+        
+        
         #region Tick
 
-        void ITickVariableClient.Tick(float delta)
+        public void Tick(float delta)
         {
             thisOrderedEntryResult = tickOrderCounter;
             tickOrderCounter++;
         }
 
         #endregion Tick
-        
     }
 }

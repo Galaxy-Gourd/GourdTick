@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GGTick
+namespace GGSharpTick
 {
     /// <summary>
     /// Defines contract for an instance of a TickBase (TickRender or TickSimulation) 

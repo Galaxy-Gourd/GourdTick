@@ -1,4 +1,4 @@
-using GGTick;
+using GGSharpTick;
 
 namespace GGTests.Tick
 {
@@ -73,6 +73,29 @@ namespace GGTests.Tick
                 }
             };
             return testVariableTicks;
+        }
+        
+        public static TickVariableConfigData[] TickVariableDataGroup(int tickCount, int ticksetsPerTick)
+        {
+            TickVariableConfigData[] data = new TickVariableConfigData[tickCount];
+            for (int i = 0; i < tickCount; i++)
+            {
+                TickVariableConfigData thisTick = new TickVariableConfigData
+                {
+                    tickName = "tick_" + i,
+                    ticksets = new TicksetConfigData[ticksetsPerTick]
+                };
+                
+                for (int e = 0; e < thisTick.ticksets.Length; e++)
+                {
+                    thisTick.ticksets[e] = new TicksetConfigData
+                    {
+                        ticksetName = "tick_" + i + "_tickset_" + e
+                    };
+                }
+                data[i] = thisTick;
+            }
+            return data;
         }
 
         #endregion Variable Ticks

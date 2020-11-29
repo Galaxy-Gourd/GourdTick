@@ -1,4 +1,4 @@
-using GGRoot;
+using GGUnityRoot;
 
 namespace GGTests.Tick.Demo
 {
@@ -10,7 +10,7 @@ namespace GGTests.Tick.Demo
         /// <param name="delta">Time(in seconds) since the previous tick.</param>
         public void TestTick(float delta)
         {
-            Core.Tick.DoTick(delta, null);
+            //Core.Tick.DoTick(delta, null);
         }
     }
 }

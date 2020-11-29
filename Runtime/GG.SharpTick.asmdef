@@ -1,6 +1,6 @@
 {
-    "name": "GG.Tick",
-    "rootNamespace": "",
+    "name": "GG.SharpTick",
+    "rootNamespace": "GGSharpTick",
     "references": [
         "GUID:afbc0cabfa5564f968a043e2e15a562d"
     ],

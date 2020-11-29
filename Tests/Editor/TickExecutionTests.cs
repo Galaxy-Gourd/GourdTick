@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using GGRoot;
 using GGTests.Tick.Demo;
 using NUnit.Framework;
-using GGTick;
+using GGSharpTick;
 
 namespace GGTests.Tick
 {
@@ -13,31 +12,39 @@ namespace GGTests.Tick
         #region Execution Order
         
         [Test]
-        [TestCase(2)]
+        [TestCase(0)]
         [TestCase(5)]
-        public void RenderTicksetsAreExecutedInOrderCreated(int ticksetCount)
+        public void VariableTicksetsAreExecutedInOrderCreated(int ticksets)
         {
-            // Create tick system with render ticksets
+            // Create tick system with variable ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
+            coreTickConfigData.variableTicks =
+                TickSystemConstructionUtility.TickVariableDataGroup(1, ticksets);
             TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
             
             // Create clients in order
-            DemoOrderedRenderTickClient.tickOrderCounter = 0;
-            DemoOrderedRenderTickClient[] clients = 
-                new DemoOrderedRenderTickClient[coreTickConfigData.variableTicks[0].ticksets.Length];
-            for (int i = 0; i < clients.Length; i++)
+            DemoOrderedVariableTickClient.tickOrderCounter = 0;
+            List<DemoOrderedVariableTickClient> clients = new List<DemoOrderedVariableTickClient>();
+            int count = 0;
+            for (int i = 0; i < coreTickConfigData.variableTicks.Length; i++)
             {
-                clients[i] = new DemoOrderedRenderTickClient(coreTickConfigData.variableTicks[0].ticksets[i], i);
+                for (int e = 0; e < coreTickConfigData.variableTicks[i].ticksets.Length; e++)
+                {
+                    clients.Add(new DemoOrderedVariableTickClient(
+                        TickSystemTestsInstaller.TestTick.variableTicks[i].ticksets[e],
+                        count));
+                    count++;
+                }
             }
             
             // Tick
-            Core.Tick.DoTick(0.0334f);
+            TickSystemTestsInstaller.TestTick.DoTick(0.0334f);
             
             // Client tick indices should match their tick keys
             foreach (var c in clients)
             {
                 Assert.AreEqual(c.targetOrder, c.thisOrderedEntryResult,
-                    "Render ticksets are not executing in the order they were created.");
+                    "Variable ticksets are not executing in the order they were created.");
             }
         }
 
@@ -46,13 +53,13 @@ namespace GGTests.Tick
         [TestCase(5, 0)]
         [TestCase(5, 5)]
         [TestCase(3, 7)]
-        public void SimulationTicksetsAreExecutedInOrderCreated(int ticks, int ticksetsPerTick)
+        public void FixedTicksetsAreExecutedInOrderCreated(int ticks, int ticksetsPerTick)
         {
             // Tick data
             const float tRate = 0.035f;
             const float tMax = 0.05f;
             
-            // Construct data with additional simulation ticks/ticksets
+            // Construct data with additional fixed ticks/ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
             coreTickConfigData.fixedTicks =
                 TickSystemConstructionUtility.TickFixedDataGroup(
@@ -63,15 +70,15 @@ namespace GGTests.Tick
             TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
             
             // Create clients in order
-            DemoOrderedSimulationTickClient.tickOrderCounter = 0;
-            List<DemoOrderedSimulationTickClient> clients = new List<DemoOrderedSimulationTickClient>();
+            DemoOrderedFixedTickClient.tickOrderCounter = 0;
+            List<DemoOrderedFixedTickClient> clients = new List<DemoOrderedFixedTickClient>();
             int count = 0;
             for (int i = 0; i < coreTickConfigData.fixedTicks.Length; i++)
             {
                 for (int e = 0; e < coreTickConfigData.fixedTicks[i].ticksets.Length; e++)
                 {
-                    clients.Add(new DemoOrderedSimulationTickClient(
-                        coreTickConfigData.fixedTicks[i].ticksets[e],
+                    clients.Add(new DemoOrderedFixedTickClient(
+                        TickSystemTestsInstaller.TestTick.fixedTicks[i].ticksets[e],
                         count));
                     count++;
                 }
@@ -79,28 +86,28 @@ namespace GGTests.Tick
             
             // Tick; make sure the delta is long enough to tick simulation
             float diff = tMax - tRate;
-            Core.Tick.DoTick(tMax - (diff / 2));
+            TickSystemTestsInstaller.TestTick.DoTick(tMax - (diff / 2));
             
             // Client tick indices should match their tick keys
             foreach (var c in clients)
             {
                 Assert.AreEqual(c.targetOrder, c.thisOrderedEntryResult,
-                    "Simulation ticksets are not executing in the order they were created.");
+                    "Fixed ticksets are not executing in the order they were created.");
             }
         }
         
         #endregion Execution Order
 
 
-        #region Simulation Ticks
+        #region Fixed Ticks
 
         [Test]
         [TestCase(0.0334f)]
         [TestCase(0.05f)]
         [TestCase(1)]
-        public void SimulationTicksDoFireAtCorrectIntervalsRelativeToRenderTick(float mockTickrate)
+        public void FixedTicksDoFireAtCorrectIntervalsRelativeToVariableTick(float mockTickrate)
         {
-            // Create new tick core system, override with custom simulation tick
+            // Create new tick core system, override with custom fixed tick
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
             coreTickConfigData.fixedTicks =
                 TickSystemConstructionUtility.TickFixedDataGroup(
@@ -110,9 +117,9 @@ namespace GGTests.Tick
                     float.MaxValue);
             TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
 
-            // Create simulation tick instance
+            // Create fixed tick instance
             DemoSimulationTickClientIntervalsTest simTick = new DemoSimulationTickClientIntervalsTest();
-            Core.Tick.Register(simTick, Core.Tick.fixedTicks[0].ticksets[0]);
+            TickSystemTestsInstaller.TestTick.Register(simTick, TickSystemTestsInstaller.TestTick.fixedTicks[0].ticksets[0]);
 
             Random r = new Random();
             float elapsedSinceLastTick = 0;
@@ -120,7 +127,7 @@ namespace GGTests.Tick
             {
                 // Tick
                 float mockDelta = (float)r.NextDouble();
-                Core.Tick.DoTick(mockDelta);
+                TickSystemTestsInstaller.TestTick.DoTick(mockDelta);
                 elapsedSinceLastTick += mockDelta;
                 
                 // Collect target ticks
@@ -137,14 +144,14 @@ namespace GGTests.Tick
                 if (simTick.ticksSinceLastCheck < targetTicks)
                 {
                     Assert.Fail(
-                        "Simulation tick client is not ticking enough based on render tickrate: "
+                        "Fixed tick client is not ticking enough based on variable tickrate: "
                         + "TARGET: " + targetTicks
                         + " RESULT: " + simTick.ticksSinceLastCheck);
                 }
                 else if (simTick.ticksSinceLastCheck > targetTicks)
                 {
                     Assert.Fail(
-                        "Simulation tick client is ticking too frequently based on render tickrate: "
+                        "Fixed tick client is ticking too frequently based on variable tickrate: "
                         + "TARGET: " + targetTicks
                         + " RESULT: " + simTick.ticksSinceLastCheck);
                 }
@@ -155,6 +162,6 @@ namespace GGTests.Tick
             }
         }
 
-        #endregion Simulation Ticks
+        #endregion Fixed Ticks
     }
 }

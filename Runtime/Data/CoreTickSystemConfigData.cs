@@ -1,6 +1,6 @@
-using GGData.Data;
+using GGSharpData;
 
-namespace GGTick
+namespace GGSharpTick
 {
     public class CoreTickSystemConfigData : CoreSystemData
     {

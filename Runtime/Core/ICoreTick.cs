@@ -1,7 +1,7 @@
 using System;
-using GGData;
+using GGSharpData;
 
-namespace GGTick
+namespace GGSharpTick
 {
     /// <summary>
     /// Describes client-facing API for core tick system

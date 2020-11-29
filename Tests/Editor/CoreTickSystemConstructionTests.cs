@@ -1,7 +1,6 @@
 using System;
-using GGRoot;
 using NUnit.Framework;
-using GGTick;
+using GGSharpTick;
 
 namespace GGTests.Tick
 {
@@ -25,13 +24,13 @@ namespace GGTests.Tick
         }
         
         [Test]
-        public void CoreTickSystemConfigDataWithNullRenderTicksetsDoesFailValidation()
+        public void CoreTickSystemConfigDataWithNullVariableTicksetsDoesFailValidation()
         {
             try
             {
                 var _ = TickSystemTestsInstaller.InstallTickSystem
                     (TickSystemConstructionUtility.TickSystemDataWithNullRenderTicks());
-                Assert.Fail("Tick system with null render tickset data is passing validation.");
+                Assert.Fail("Tick system with null variable tickset data is passing validation.");
             }
             catch (NullReferenceException)
             {
@@ -40,13 +39,13 @@ namespace GGTests.Tick
         }
         
         [Test]
-        public void CoreTickSystemConfigDataWithNullSimulationTicksDoesFailValidation()
+        public void CoreTickSystemConfigDataWithNullFixedTicksDoesFailValidation()
         {
             try
             {
                 var _ = TickSystemTestsInstaller.InstallTickSystem
                     (TickSystemConstructionUtility.TickSystemDataWithNullSimulationTicks());
-                Assert.Fail("Tick system with null simulation ticks data is passing validation.");
+                Assert.Fail("Tick system with null fixed ticks data is passing validation.");
             }
             catch (NullReferenceException)
             {
@@ -60,17 +59,28 @@ namespace GGTests.Tick
         #region Data Integrity
 
         [Test]
-        [TestCase(0)]
-        [TestCase(50)]
-        public void RenderTickDoesInitializeWithCorrectNumberOfTicksets(int additionalTicksets)
+        [TestCase(0, 0)]
+        [TestCase(0, 5)]
+        [TestCase(5, 0)]
+        [TestCase(5, 5)]
+        public void VariableTicksDoInitializeWithCorrectNumberOfTicksets(int ticks, int ticksetsPerTick)
         {
             // Construct data with additoinal render ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
+            coreTickConfigData.variableTicks =
+                TickSystemConstructionUtility.TickVariableDataGroup(ticks, ticksetsPerTick);
             TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
             
+            // Total variable ticksets should be equal to ticks + ticksets per (simulation ticks have no defaults)
+            int count = 0;
+            foreach (var tick in TickSystemTestsInstaller.TestTick.variableTicks)
+            {
+                count += tick.ticksets.Count;
+            }
+            
             // Total render ticksets should be equal to addtional ticksets plus 1 (the default tickset)
-            Assert.AreEqual(additionalTicksets + 1, Core.Tick.variableTicks[0].ticksets.Count,
-                "Render tickset count is not correct!");
+            Assert.AreEqual(ticks * ticksetsPerTick, count,
+                "Variable tickset count is not correct!");
         }
 
         [Test]
@@ -78,7 +88,7 @@ namespace GGTests.Tick
         [TestCase(0, 5)]
         [TestCase(5, 0)]
         [TestCase(5, 5)]
-        public void SimulationTicksDoInitializeWithCorrectNumberOfTicksets(int ticks, int ticksetsPerTick)
+        public void FixedTicksDoInitializeWithCorrectNumberOfTicksets(int ticks, int ticksetsPerTick)
         {
             // Construct data with additional simulation ticks/ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
@@ -86,14 +96,14 @@ namespace GGTests.Tick
                 TickSystemConstructionUtility.TickFixedDataGroup(ticks, ticksetsPerTick);
             TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
 
-            // Total simulation ticksets should be equal to ticks + ticksets per (simulation ticks have no defaults)
+            // Total fixed ticksets should be equal to ticks + ticksets per (simulation ticks have no defaults)
             int count = 0;
-            foreach (var tick in Core.Tick.fixedTicks)
+            foreach (var tick in TickSystemTestsInstaller.TestTick.fixedTicks)
             {
                 count += tick.ticksets.Count;
             }
             Assert.AreEqual(ticks * ticksetsPerTick, count,
-                "Simulation tickset count is not correct!");
+                "Fixed tickset count is not correct!");
         }
 
         #endregion Data Integrity

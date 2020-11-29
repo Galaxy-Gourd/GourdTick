@@ -1,4 +1,4 @@
-namespace GGTick
+namespace GGSharpTick
 {
     public class TickFixedConfigData : TickBaseConfigData
     {

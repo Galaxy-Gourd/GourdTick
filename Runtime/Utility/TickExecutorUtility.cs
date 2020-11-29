@@ -1,6 +1,6 @@
 using System;
 
-namespace GGTick
+namespace GGSharpTick
 {
     /// <summary>
     /// Executes ticks across existing tick instances + ticksets.

@@ -1,4 +1,4 @@
-using GGTick;
+using GGSharpTick;
 
 namespace GGTests.Tick.Demo
 {

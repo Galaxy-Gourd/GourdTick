@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using GGRoot;
 using GGTests.Tick.Demo;
 using NUnit.Framework;
-using GGTick;
 
 namespace GGTests.Tick
 {
@@ -17,7 +15,7 @@ namespace GGTests.Tick
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(20)]
-        public void RenderTickClientsDoRegisterWithRenderTicksets(int clientCount)
+        public void VariableTickClientsDoRegisterWithVariableTicksets(int clientCount)
         {
             // Create default tick core
             TickSystemTestsInstaller.InstallTickSystem(TickSystemConstructionUtility.BlankCoreTickSystemConfigData());
@@ -25,23 +23,23 @@ namespace GGTests.Tick
             // Create and regster clients
             for (int i = 0; i < clientCount; i++)
             {
-                DemoRenderTickClientInstanceRegistrationTest thisClient = 
-                    new DemoRenderTickClientInstanceRegistrationTest();
-                thisClient.RegisterTickClient();
+                DemoVariableTickClientInstanceRegistrationTest thisClient = 
+                    new DemoVariableTickClientInstanceRegistrationTest();
+                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.variableTicks[0].ticksets[0]);
             }
             
             // Tick once to ready client additions
-            Core.Tick.DoTick(0.01f);
+            TickSystemTestsInstaller.TestTick.DoTick(0.01f);
 
-            Assert.AreEqual(GetTotalNumberOfRenderTickSubscribers(), clientCount,
-                "Subscriber count for render ticksets do not match number of registrants.");
+            Assert.AreEqual(GetTotalNumberOfVariableTickSubscribers(), clientCount,
+                "Subscriber count for variable ticksets do not match number of registrants.");
         }
         
         [Test]
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(20)]
-        public void SimulationTickClientsDoRegisterWithSimTicks(int clientCount)
+        public void FixedTickClientsDoRegisterWithFixedTicks(int clientCount)
         {
             // Create default tick core
             TickSystemTestsInstaller.InstallTickSystem(TickSystemConstructionUtility.BlankCoreTickSystemConfigData());
@@ -49,20 +47,20 @@ namespace GGTests.Tick
             // Create and regster clients
             for (int i = 0; i < clientCount; i++)
             {
-                DemoSimulationTickClientInstanceRegistrationTest thisClient = 
-                    new DemoSimulationTickClientInstanceRegistrationTest();
-                thisClient.RegisterTickClient();
+                DemoFixedTickClientInstanceRegistrationTest thisClient = 
+                    new DemoFixedTickClientInstanceRegistrationTest();
+                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.fixedTicks[0].ticksets[0]);
             }
             
             // Tick once to ready client additions
-            Core.Tick.DoTick(TickSystemConstructionUtility.CONST_blankSimTickRate);
+            TickSystemTestsInstaller.TestTick.DoTick(TickSystemConstructionUtility.CONST_blankSimTickRate);
 
             Assert.AreEqual(GetTotalNumberOfSimulationTickSubscribers(), clientCount,
-                "Subscriber count for simulation ticksets do not match number of registrants.");
+                "Subscriber count for fixed ticksets do not match number of registrants.");
         }
 
         [Test]
-        public void RenderTickClientsDoUnregisterCorrectly()
+        public void VariableTickClientsDoUnregisterCorrectly()
         {
             // Create default tick core
             TickSystemTestsInstaller.InstallTickSystem(TickSystemConstructionUtility.BlankCoreTickSystemConfigData());
@@ -70,35 +68,35 @@ namespace GGTests.Tick
             // Register clients
             Random r = new Random();
             int subCount = r.Next(10, 20);
-            List<DemoRenderTickClientInstanceRegistrationTest> clients = 
-                new List<DemoRenderTickClientInstanceRegistrationTest>();
+            List<DemoVariableTickClientInstanceRegistrationTest> clients = 
+                new List<DemoVariableTickClientInstanceRegistrationTest>();
             for (int i = 0; i < subCount; i++)
             {
-                DemoRenderTickClientInstanceRegistrationTest thisClient = 
-                    new DemoRenderTickClientInstanceRegistrationTest();
-                thisClient.RegisterTickClient();
+                DemoVariableTickClientInstanceRegistrationTest thisClient = 
+                    new DemoVariableTickClientInstanceRegistrationTest();
+                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.variableTicks[0].ticksets[0]);
                 clients.Add(thisClient);
             }
             
             // Tick once to ready client additions
-            Core.Tick.DoTick(0.01f);
+            TickSystemTestsInstaller.TestTick.DoTick(0.01f);
             
             // Unrgister clients
             int remCount = r.Next(3, 8);
             for (int i = 0; i < remCount; i++)
             {
-                clients[i].UnregisterTickClient();
+                clients[i].UnregisterTickClient(TickSystemTestsInstaller.TestTick.variableTicks[0].ticksets[0]);
             }
             
             // Tick once to ready client subtractions
-            Core.Tick.DoTick(0.01f);
+            TickSystemTestsInstaller.TestTick.DoTick(0.01f);
             
-            Assert.AreEqual(GetTotalNumberOfRenderTickSubscribers(), subCount - remCount,
-                "Subscriber count for render ticksets do not match number of registrants.");
+            Assert.AreEqual(GetTotalNumberOfVariableTickSubscribers(), subCount - remCount,
+                "Subscriber count for variable ticksets do not match number of registrants.");
         }
 
         [Test]
-        public void SimulationTickClientsDoUnregisterCorrectly()
+        public void FixedTickClientsDoUnregisterCorrectly()
         {
             // Create default tick core
             TickSystemTestsInstaller.InstallTickSystem(TickSystemConstructionUtility.BlankCoreTickSystemConfigData());
@@ -106,39 +104,39 @@ namespace GGTests.Tick
             // Register clients
             Random r = new Random();
             int subCount = r.Next(10, 20);
-            List<DemoSimulationTickClientInstanceRegistrationTest> clients = 
-                new List<DemoSimulationTickClientInstanceRegistrationTest>();
+            List<DemoFixedTickClientInstanceRegistrationTest> clients = 
+                new List<DemoFixedTickClientInstanceRegistrationTest>();
             for (int i = 0; i < subCount; i++)
             {
-                DemoSimulationTickClientInstanceRegistrationTest thisClient = 
-                    new DemoSimulationTickClientInstanceRegistrationTest();
-                thisClient.RegisterTickClient();
+                DemoFixedTickClientInstanceRegistrationTest thisClient = 
+                    new DemoFixedTickClientInstanceRegistrationTest();
+                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.fixedTicks[0].ticksets[0]);
                 clients.Add(thisClient);
             }
             
             // Tick once to ready client additions
-            Core.Tick.DoTick(TickSystemConstructionUtility.CONST_blankSimTickRate);
+            TickSystemTestsInstaller.TestTick.DoTick(TickSystemConstructionUtility.CONST_blankSimTickRate);
             
             // Unrgister clients
             int remCount = r.Next(3, 8);
             for (int i = 0; i < remCount; i++)
             {
-                clients[i].UnregisterTickClient();
+                clients[i].UnregisterTickClient(TickSystemTestsInstaller.TestTick.fixedTicks[0].ticksets[0]);
             }
             
             // Tick once to ready client subtractions
-            Core.Tick.DoTick(TickSystemConstructionUtility.CONST_blankSimTickRate);
+            TickSystemTestsInstaller.TestTick.DoTick(TickSystemConstructionUtility.CONST_blankSimTickRate);
             
             Assert.AreEqual(GetTotalNumberOfSimulationTickSubscribers(), subCount - remCount,
-                "Subscriber count for render ticksets do not match number of registrants.");
+                "Subscriber count for fixed ticksets do not match number of registrants.");
         }
 
         #region Utility
 
-        private static int GetTotalNumberOfRenderTickSubscribers()
+        private static int GetTotalNumberOfVariableTickSubscribers()
         {
             int registeredClients = 0;
-            foreach (var t in Core.Tick.variableTicks[0].ticksets)
+            foreach (var t in TickSystemTestsInstaller.TestTick.variableTicks[0].ticksets)
             {
                 registeredClients += t.subscriberCount;
             }
@@ -148,7 +146,7 @@ namespace GGTests.Tick
         private static int GetTotalNumberOfSimulationTickSubscribers()
         {
             int registeredClients = 0;
-            foreach (var t in Core.Tick.fixedTicks)
+            foreach (var t in TickSystemTestsInstaller.TestTick.fixedTicks)
             {
                 foreach (var s in t.ticksets)
                 {

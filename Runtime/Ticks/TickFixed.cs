@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GGTick
+namespace GGSharpTick
 {
     public sealed class TickFixed : TickBase
     {
