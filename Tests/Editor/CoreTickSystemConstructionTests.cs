@@ -67,13 +67,13 @@ namespace GGTests.Tick
         {
             // Construct data with additoinal render ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
-            coreTickConfigData.variableTicks =
+            coreTickConfigData.VariableTicks =
                 TickSystemConstructionUtility.TickVariableDataGroup(ticks, ticksetsPerTick);
             TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
             
             // Total variable ticksets should be equal to ticks + ticksets per (simulation ticks have no defaults)
             int count = 0;
-            foreach (var tick in TickSystemTestsInstaller.TestTick.variableTicks)
+            foreach (var tick in TickSystemTestsInstaller.TestTick.VariableTicks)
             {
                 count += tick.ticksets.Count;
             }
@@ -92,13 +92,13 @@ namespace GGTests.Tick
         {
             // Construct data with additional simulation ticks/ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
-            coreTickConfigData.fixedTicks =
+            coreTickConfigData.FixedTicks =
                 TickSystemConstructionUtility.TickFixedDataGroup(ticks, ticksetsPerTick);
             TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
 
             // Total fixed ticksets should be equal to ticks + ticksets per (simulation ticks have no defaults)
             int count = 0;
-            foreach (var tick in TickSystemTestsInstaller.TestTick.fixedTicks)
+            foreach (var tick in TickSystemTestsInstaller.TestTick.FixedTicks)
             {
                 count += tick.ticksets.Count;
             }

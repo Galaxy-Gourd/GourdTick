@@ -16,8 +16,8 @@ namespace GGTests.Tick
         {
             CoreTickSystemConfigData data = new CoreTickSystemConfigData
             {
-                variableTicks = BlankVariableTickDataGroup(), 
-                fixedTicks = BlankFixedTickDataGroup()
+                VariableTicks = BlankVariableTickDataGroup(), 
+                FixedTicks = BlankFixedTickDataGroup()
             };
             return data;
         }
@@ -30,8 +30,8 @@ namespace GGTests.Tick
         {
             CoreTickSystemConfigData data = new CoreTickSystemConfigData
             {
-                variableTicks = null, 
-                fixedTicks = BlankFixedTickDataGroup()
+                VariableTicks = null, 
+                FixedTicks = BlankFixedTickDataGroup()
             };
             return data;
         }
@@ -44,8 +44,8 @@ namespace GGTests.Tick
         {
             CoreTickSystemConfigData data = new CoreTickSystemConfigData
             {
-                variableTicks = BlankVariableTickDataGroup(), 
-                fixedTicks = null
+                VariableTicks = BlankVariableTickDataGroup(), 
+                FixedTicks = null
             };
             return data;
         }

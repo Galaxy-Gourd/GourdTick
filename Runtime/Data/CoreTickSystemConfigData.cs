@@ -4,7 +4,7 @@ namespace GGSharpTick
 {
     public class CoreTickSystemConfigData : CoreSystemData
     {
-        public TickVariableConfigData[] variableTicks;
-        public TickFixedConfigData[] fixedTicks;
+        public TickVariableConfigData[] VariableTicks;
+        public TickFixedConfigData[] FixedTicks;
     }
 }

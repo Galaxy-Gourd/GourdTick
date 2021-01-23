@@ -21,13 +21,13 @@ namespace GGSharpTick
                     "Core tick system data cannot be null!");
             }
             
-            if (data.variableTicks == null)
+            if (data.VariableTicks == null)
             {
                 throw new NullReferenceException(
                     "Core tick system variable ticks data cannot be null!");
             }
 
-            if (data.fixedTicks == null)
+            if (data.FixedTicks == null)
             {
                 throw new NullReferenceException(
                     "Core tick system fixed ticks data cannot be null!");

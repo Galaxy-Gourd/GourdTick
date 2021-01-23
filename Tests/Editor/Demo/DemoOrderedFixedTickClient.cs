@@ -2,7 +2,7 @@ using GGSharpTick;
 
 namespace GGTests.Tick.Demo
 {
-    public class DemoOrderedFixedTickClient : ITickFixedClient
+    public class DemoOrderedFixedTickClient : ITickClientFixed
     {
         #region Data
 

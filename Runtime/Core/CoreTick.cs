@@ -13,9 +13,9 @@ namespace GGSharpTick
     {
         #region Properties
         
-        public TickVariable[] variableTicks { get; }
-        public TickFixed[] fixedTicks { get; }
-        public TimeSpan elapsedSinceSimStartup { get; private set; }
+        public TickVariable[] VariableTicks { get; }
+        public TickFixed[] FixedTicks { get; }
+        public TimeSpan ElapsedSinceSimStartup { get; private set; }
         
         #endregion Properties
         
@@ -30,17 +30,17 @@ namespace GGSharpTick
                 return;
             
             // Create variable ticks
-            variableTicks = new TickVariable[data.variableTicks.Length];
-            for(int i = 0; i < data.variableTicks.Length; i++)
+            VariableTicks = new TickVariable[data.VariableTicks.Length];
+            for(int i = 0; i < data.VariableTicks.Length; i++)
             {
-                variableTicks[i] = new TickVariable(data.variableTicks[i]);
+                VariableTicks[i] = new TickVariable(data.VariableTicks[i]);
             }
             
             // Create fixed ticks
-            fixedTicks = new TickFixed[data.fixedTicks.Length];
-            for(int i = 0; i < data.fixedTicks.Length; i++)
+            FixedTicks = new TickFixed[data.FixedTicks.Length];
+            for(int i = 0; i < data.FixedTicks.Length; i++)
             {
-                fixedTicks[i] = new TickFixed(data.fixedTicks[i]);
+                FixedTicks[i] = new TickFixed(data.FixedTicks[i]);
             }
         }
 
@@ -48,7 +48,7 @@ namespace GGSharpTick
         {
             base.OnPostCoreSystemsInitialization();
             
-            _systemClient?.OnSystemTickInitialized(variableTicks, fixedTicks);
+            _systemClient?.OnSystemTickInitialized(VariableTicks, FixedTicks);
         }
 
         #endregion Construction
@@ -80,14 +80,14 @@ namespace GGSharpTick
             // Null check
             if (tick == null)
             {
-                tick = variableTicks[0];
+                tick = VariableTicks[0];
             }
             
             // Are we also ticking fixed step?
             if (tick.fixedStep)
             {
-                elapsedSinceSimStartup += TimeSpan.FromSeconds(delta);
-                TickExecutorUtility.ExecuteFixedTicks(delta, fixedTicks);
+                ElapsedSinceSimStartup += TimeSpan.FromSeconds(delta);
+                TickExecutorUtility.ExecuteFixedTicks(delta, FixedTicks);
             }
             
             TickExecutorUtility.ExecuteVariableTick(delta, tick);

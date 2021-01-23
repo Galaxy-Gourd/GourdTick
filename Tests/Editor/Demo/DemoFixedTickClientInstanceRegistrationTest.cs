@@ -2,7 +2,7 @@ using GGSharpTick;
 
 namespace GGTests.Tick.Demo
 {
-    public class DemoFixedTickClientInstanceRegistrationTest : ITickFixedClient
+    public class DemoFixedTickClientInstanceRegistrationTest : ITickClientFixed
     {
         #region Registration
 
@@ -21,7 +21,7 @@ namespace GGTests.Tick.Demo
         
         #region Tick
 
-        void ITickFixedClient.Tick(float delta)
+        void ITickClientFixed.Tick(float delta)
         {
             
         }

@@ -40,7 +40,7 @@ namespace GGTests.Tick
             }
             
             TimeSpan elapsed = TimeSpan.FromSeconds(tickCount * interval);
-            float round = Math.Abs((float)TickSystemTestsInstaller.TestTick.elapsedSinceSimStartup.TotalSeconds - (float)elapsed.TotalSeconds);
+            float round = Math.Abs((float)TickSystemTestsInstaller.TestTick.ElapsedSinceSimStartup.TotalSeconds - (float)elapsed.TotalSeconds);
             Assert.LessOrEqual(round, 0.0001f,
                 "Elapsed time does not add up based on constant delta intervals.");
         }

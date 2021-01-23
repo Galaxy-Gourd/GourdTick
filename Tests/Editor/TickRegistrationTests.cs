@@ -25,7 +25,7 @@ namespace GGTests.Tick
             {
                 DemoVariableTickClientInstanceRegistrationTest thisClient = 
                     new DemoVariableTickClientInstanceRegistrationTest();
-                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.variableTicks[0].ticksets[0]);
+                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.VariableTicks[0].ticksets[0]);
             }
             
             // Tick once to ready client additions
@@ -49,7 +49,7 @@ namespace GGTests.Tick
             {
                 DemoFixedTickClientInstanceRegistrationTest thisClient = 
                     new DemoFixedTickClientInstanceRegistrationTest();
-                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.fixedTicks[0].ticksets[0]);
+                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.FixedTicks[0].ticksets[0]);
             }
             
             // Tick once to ready client additions
@@ -74,7 +74,7 @@ namespace GGTests.Tick
             {
                 DemoVariableTickClientInstanceRegistrationTest thisClient = 
                     new DemoVariableTickClientInstanceRegistrationTest();
-                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.variableTicks[0].ticksets[0]);
+                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.VariableTicks[0].ticksets[0]);
                 clients.Add(thisClient);
             }
             
@@ -85,7 +85,7 @@ namespace GGTests.Tick
             int remCount = r.Next(3, 8);
             for (int i = 0; i < remCount; i++)
             {
-                clients[i].UnregisterTickClient(TickSystemTestsInstaller.TestTick.variableTicks[0].ticksets[0]);
+                clients[i].UnregisterTickClient(TickSystemTestsInstaller.TestTick.VariableTicks[0].ticksets[0]);
             }
             
             // Tick once to ready client subtractions
@@ -110,7 +110,7 @@ namespace GGTests.Tick
             {
                 DemoFixedTickClientInstanceRegistrationTest thisClient = 
                     new DemoFixedTickClientInstanceRegistrationTest();
-                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.fixedTicks[0].ticksets[0]);
+                thisClient.RegisterTickClient(TickSystemTestsInstaller.TestTick.FixedTicks[0].ticksets[0]);
                 clients.Add(thisClient);
             }
             
@@ -121,7 +121,7 @@ namespace GGTests.Tick
             int remCount = r.Next(3, 8);
             for (int i = 0; i < remCount; i++)
             {
-                clients[i].UnregisterTickClient(TickSystemTestsInstaller.TestTick.fixedTicks[0].ticksets[0]);
+                clients[i].UnregisterTickClient(TickSystemTestsInstaller.TestTick.FixedTicks[0].ticksets[0]);
             }
             
             // Tick once to ready client subtractions
@@ -136,7 +136,7 @@ namespace GGTests.Tick
         private static int GetTotalNumberOfVariableTickSubscribers()
         {
             int registeredClients = 0;
-            foreach (var t in TickSystemTestsInstaller.TestTick.variableTicks[0].ticksets)
+            foreach (var t in TickSystemTestsInstaller.TestTick.VariableTicks[0].ticksets)
             {
                 registeredClients += t.subscriberCount;
             }
@@ -146,7 +146,7 @@ namespace GGTests.Tick
         private static int GetTotalNumberOfSimulationTickSubscribers()
         {
             int registeredClients = 0;
-            foreach (var t in TickSystemTestsInstaller.TestTick.fixedTicks)
+            foreach (var t in TickSystemTestsInstaller.TestTick.FixedTicks)
             {
                 foreach (var s in t.ticksets)
                 {

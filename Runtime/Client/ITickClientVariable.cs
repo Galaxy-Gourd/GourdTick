@@ -1,6 +1,6 @@
 namespace GGSharpTick
 {
-    public interface ITickVariableClient : ITickClient
+    public interface ITickClientVariable : ITickClient
     {
         /// <summary>
         /// Ticks the variable client.

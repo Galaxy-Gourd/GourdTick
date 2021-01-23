@@ -13,17 +13,17 @@ namespace GGSharpTick
         /// <summary>
         /// The variable ticks.
         /// </summary>
-        TickVariable[] variableTicks { get; }
+        TickVariable[] VariableTicks { get; }
         
         /// <summary>
         /// List of fixed (simulation) ticks
         /// </summary>
-        TickFixed[] fixedTicks { get; }
+        TickFixed[] FixedTicks { get; }
         
         /// <summary>
         /// The amount of time elapsed since the simulation began.
         /// </summary>
-        TimeSpan elapsedSinceSimStartup { get; }
+        TimeSpan ElapsedSinceSimStartup { get; }
 
         #endregion Properties
 

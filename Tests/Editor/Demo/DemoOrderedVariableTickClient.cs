@@ -2,7 +2,7 @@ using GGSharpTick;
 
 namespace GGTests.Tick.Demo
 {
-    public class DemoOrderedVariableTickClient : ITickVariableClient
+    public class DemoOrderedVariableTickClient : ITickClientVariable
     {
         #region Data
 
@@ -30,7 +30,7 @@ namespace GGTests.Tick.Demo
 
         #region Tick
 
-        void ITickVariableClient.Tick(float delta)
+        void ITickClientVariable.Tick(float delta)
         {
             thisOrderedEntryResult = tickOrderCounter;
             tickOrderCounter++;

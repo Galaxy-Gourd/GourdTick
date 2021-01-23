@@ -18,7 +18,7 @@ namespace GGTests.Tick
         {
             // Create tick system with variable ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
-            coreTickConfigData.variableTicks =
+            coreTickConfigData.VariableTicks =
                 TickSystemConstructionUtility.TickVariableDataGroup(1, ticksets);
             TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
             
@@ -26,12 +26,12 @@ namespace GGTests.Tick
             DemoOrderedVariableTickClient.tickOrderCounter = 0;
             List<DemoOrderedVariableTickClient> clients = new List<DemoOrderedVariableTickClient>();
             int count = 0;
-            for (int i = 0; i < coreTickConfigData.variableTicks.Length; i++)
+            for (int i = 0; i < coreTickConfigData.VariableTicks.Length; i++)
             {
-                for (int e = 0; e < coreTickConfigData.variableTicks[i].ticksets.Length; e++)
+                for (int e = 0; e < coreTickConfigData.VariableTicks[i].ticksets.Length; e++)
                 {
                     clients.Add(new DemoOrderedVariableTickClient(
-                        TickSystemTestsInstaller.TestTick.variableTicks[i].ticksets[e],
+                        TickSystemTestsInstaller.TestTick.VariableTicks[i].ticksets[e],
                         count));
                     count++;
                 }
@@ -61,7 +61,7 @@ namespace GGTests.Tick
             
             // Construct data with additional fixed ticks/ticksets
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
-            coreTickConfigData.fixedTicks =
+            coreTickConfigData.FixedTicks =
                 TickSystemConstructionUtility.TickFixedDataGroup(
                     ticks, 
                     ticksetsPerTick, 
@@ -73,12 +73,12 @@ namespace GGTests.Tick
             DemoOrderedFixedTickClient.tickOrderCounter = 0;
             List<DemoOrderedFixedTickClient> clients = new List<DemoOrderedFixedTickClient>();
             int count = 0;
-            for (int i = 0; i < coreTickConfigData.fixedTicks.Length; i++)
+            for (int i = 0; i < coreTickConfigData.FixedTicks.Length; i++)
             {
-                for (int e = 0; e < coreTickConfigData.fixedTicks[i].ticksets.Length; e++)
+                for (int e = 0; e < coreTickConfigData.FixedTicks[i].ticksets.Length; e++)
                 {
                     clients.Add(new DemoOrderedFixedTickClient(
-                        TickSystemTestsInstaller.TestTick.fixedTicks[i].ticksets[e],
+                        TickSystemTestsInstaller.TestTick.FixedTicks[i].ticksets[e],
                         count));
                     count++;
                 }
@@ -109,7 +109,7 @@ namespace GGTests.Tick
         {
             // Create new tick core system, override with custom fixed tick
             CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
-            coreTickConfigData.fixedTicks =
+            coreTickConfigData.FixedTicks =
                 TickSystemConstructionUtility.TickFixedDataGroup(
                     1, 
                     1, 
@@ -119,7 +119,7 @@ namespace GGTests.Tick
 
             // Create fixed tick instance
             DemoSimulationTickClientIntervalsTest simTick = new DemoSimulationTickClientIntervalsTest();
-            TickSystemTestsInstaller.TestTick.Register(simTick, TickSystemTestsInstaller.TestTick.fixedTicks[0].ticksets[0]);
+            TickSystemTestsInstaller.TestTick.Register(simTick, TickSystemTestsInstaller.TestTick.FixedTicks[0].ticksets[0]);
 
             Random r = new Random();
             float elapsedSinceLastTick = 0;
