@@ -11,16 +11,17 @@ namespace GGSharpTick
     /// </summary>
     public class CoreTick : CoreSystemBase<CoreTickSystemConfigData, ICoreSystemClientTick>, ICoreTick
     {
-        #region Properties
+        #region VARIABLES
         
+        // Properties
         public TickVariable[] VariableTicks { get; }
         public TickFixed[] FixedTicks { get; }
         public TimeSpan ElapsedSinceSimStartup { get; private set; }
+
+        #endregion VARIABLES
         
-        #endregion Properties
         
-        
-        #region Construction
+        #region CONSTRUCTION
 
         public CoreTick(CoreTickSystemConfigData data, ICoreSystemClientTick systemClient = null)
             : base(data, systemClient)
@@ -44,17 +45,17 @@ namespace GGSharpTick
             }
         }
 
-        public override void OnPostCoreSystemsInitialization()
+        public override void OnPostAllSystemsInitialized()
         {
-            base.OnPostCoreSystemsInitialization();
+            base.OnPostAllSystemsInitialized();
             
             _systemClient?.OnSystemTickInitialized(VariableTicks, FixedTicks);
         }
 
-        #endregion Construction
+        #endregion CONSTRUCTION
 
 
-        #region Registration
+        #region REGISTRATION
 
         void ICoreTick.Register(ITickClient obj, ITicksetInstance tickset)
         {
@@ -66,10 +67,10 @@ namespace GGSharpTick
             tickset?.StageForRemoval(obj);
         }
 
-        #endregion Registration
+        #endregion REGISTRATION
         
 
-        #region Source
+        #region SOURCE
 
         void ICoreTick.DoTick(float delta, TickVariable tick)
         {
@@ -93,6 +94,7 @@ namespace GGSharpTick
             TickExecutorUtility.ExecuteVariableTick(delta, tick);
         }
 
-        #endregion Source
+        #endregion SOURCE
+
     }
 }
