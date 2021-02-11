@@ -28,7 +28,7 @@ namespace GGTests.Tick
         {
             try
             {
-                var _ = TickSystemTestsInstaller.InstallTickSystem
+                CoreTick _ = TickSystemTestsInstaller.InstallTickSystem
                     (TickSystemConstructionUtility.TickSystemDataWithNullRenderTicks());
                 Assert.Fail("Tick system with null variable tickset data is passing validation.");
             }
@@ -43,7 +43,7 @@ namespace GGTests.Tick
         {
             try
             {
-                var _ = TickSystemTestsInstaller.InstallTickSystem
+                CoreTick _ = TickSystemTestsInstaller.InstallTickSystem
                     (TickSystemConstructionUtility.TickSystemDataWithNullSimulationTicks());
                 Assert.Fail("Tick system with null fixed ticks data is passing validation.");
             }
@@ -66,7 +66,8 @@ namespace GGTests.Tick
         public void VariableTicksDoInitializeWithCorrectNumberOfTicksets(int ticks, int ticksetsPerTick)
         {
             // Construct data with additoinal render ticksets
-            CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
+            CoreTickSystemConfigData coreTickConfigData = 
+                TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
             coreTickConfigData.VariableTicks =
                 TickSystemConstructionUtility.TickVariableDataGroup(ticks, ticksetsPerTick);
             TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
@@ -91,7 +92,8 @@ namespace GGTests.Tick
         public void FixedTicksDoInitializeWithCorrectNumberOfTicksets(int ticks, int ticksetsPerTick)
         {
             // Construct data with additional simulation ticks/ticksets
-            CoreTickSystemConfigData coreTickConfigData = TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
+            CoreTickSystemConfigData coreTickConfigData = 
+                TickSystemConstructionUtility.BlankCoreTickSystemConfigData();
             coreTickConfigData.FixedTicks =
                 TickSystemConstructionUtility.TickFixedDataGroup(ticks, ticksetsPerTick);
             TickSystemTestsInstaller.InstallTickSystem(coreTickConfigData);
