@@ -1,5 +1,3 @@
-using GGUnityRoot;
-
 namespace GGTests.Tick.Demo
 {
     public class TickSourceTests
