@@ -4,6 +4,9 @@
   "displayName": "GG Sharp Tick",
   "description": "C# ticking system.",
   "unity": "2019.4",
+  "dependencies": {
+    "com.galaxygourd.ggsharpdata": "1.0.0"
+  },
   "author": {
     "name": "Galaxy Gourd",
     "email": "mstephens.dev@gmail.com" 
