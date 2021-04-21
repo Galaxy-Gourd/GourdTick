@@ -28,9 +28,9 @@ namespace GGSharpTick
         
         void ITickInstance.Tick(float delta)
         {
-            foreach (ITicksetInstance sim in ticksets)
+            foreach (ITicksetInstance ticksetInstance in ticksets)
             {
-                sim.Tick(delta);
+                ticksetInstance.Tick(delta);
             }
             
             CalculateTPS(delta);

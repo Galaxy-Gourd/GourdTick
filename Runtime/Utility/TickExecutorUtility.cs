@@ -27,8 +27,8 @@ namespace GGSharpTick
                 while (tick.accumulator >= tickrate)
                 {
                     // Tick
-                    tick.accumulator -= tickrate;
                     ((ITickInstance) tick).Tick(tickrate);
+                    tick.accumulator -= tickrate;
                     tick.InterpolationValue = Math.Min(tick.accumulator / tick.configData.Tickrate, 1);
                 }
             }

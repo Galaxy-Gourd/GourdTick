@@ -3,13 +3,13 @@ using GGSharpData;
 
 namespace GGSharpTick
 {
-    //Inspo from: 
+    //Core from: 
     //https://forum.unity.com/threads/writing-update-manager-what-should-i-know.402571/
     
     /// <summary>
     /// Implementation of ICoreTick interface
     /// </summary>
-    public class CoreTick : CoreSystemBase<CoreTickSystemConfigData, ICoreSystemClientTick>, ICoreTick
+    public class CoreTick : CoreSystemBase<CoreTickSystemConfigData>, ICoreTick
     {
         #region VARIABLES
         
@@ -23,8 +23,7 @@ namespace GGSharpTick
         
         #region CONSTRUCTION
 
-        public CoreTick(CoreTickSystemConfigData data, ICoreSystemClientTick systemClient = null)
-            : base(data, systemClient)
+        public CoreTick(CoreTickSystemConfigData data, ICoreSystemClientTick client = null) : base(data)
         {
             // Make sure we have valid ticking data
             if (!CoreTickValidationUtility.ValidateCoreTickSystemConfigData(data))
@@ -43,13 +42,9 @@ namespace GGSharpTick
             {
                 FixedTicks[i] = new TickFixed(data.FixedTicks[i]);
             }
-        }
-
-        public override void OnPostAllSystemsInitialized()
-        {
-            base.OnPostAllSystemsInitialized();
             
-            _systemClient?.OnSystemTickInitialized(VariableTicks, FixedTicks);
+            // Tell the client we're finished
+            client?.OnSystemTickInitialized(VariableTicks, FixedTicks);
         }
 
         #endregion CONSTRUCTION
@@ -95,6 +90,5 @@ namespace GGSharpTick
         }
 
         #endregion SOURCE
-
     }
 }
