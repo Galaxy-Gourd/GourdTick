@@ -1,6 +1,6 @@
 namespace GGSharpTick
 {
-    public class TickVariableConfigData : TickBaseConfigData
+    public class DataConfigTickVariable : DataConfigTick
     {
         public bool StepFixed;
     }

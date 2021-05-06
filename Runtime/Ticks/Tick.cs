@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 namespace GGSharpTick
 {
-    public abstract class TickBase : ITickInstance
+    public abstract class Tick : ITick
     {
         #region Properties
 
-        public List<ITicksetInstance> ticksets { get; protected set; }
-        public uint tickCount { get; private set; }
-        public float ticksPerSecond { get; private set; }
+        public List<ITickset> Ticksets { get; protected set; }
+        public uint TickCount { get; private set; }
+        public float TicksPerSecond { get; private set; }
         public string TickName { get; protected set; }
         public float InterpolationValue { get; internal set; }
 
@@ -26,15 +26,15 @@ namespace GGSharpTick
 
         #region Tick
         
-        void ITickInstance.Tick(float delta)
+        void ITick.DoTick(float delta)
         {
-            foreach (ITicksetInstance ticksetInstance in ticksets)
+            foreach (ITickset ticksetInstance in Ticksets)
             {
-                ticksetInstance.Tick(delta);
+                ticksetInstance.DoTick(delta);
             }
             
             CalculateTPS(delta);
-            tickCount++;
+            TickCount++;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace GGSharpTick
             _tpsAccumDelta += delta;
             if (_tpsAccumDelta > 1.0f / CONST_tpsUpdateRate)
             {
-                ticksPerSecond = _tpsFrameCount / _tpsAccumDelta;
+                TicksPerSecond = _tpsFrameCount / _tpsAccumDelta;
                 _tpsFrameCount = 0;
                 _tpsAccumDelta -= 1.0f / CONST_tpsUpdateRate;
             }

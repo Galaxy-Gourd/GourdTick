@@ -16,20 +16,20 @@ namespace GGSharpTick
         {
             foreach (TickFixed tick in ticks)
             {
-                float tickrate = tick.configData.Tickrate;
-                tick.accumulator += delta;
-                tick.accumulator = Math.Min(tick.accumulator, tick.configData.MaxDelta);
+                float tickrate = tick.ConfigData.Tickrate;
+                tick.Accumulator += delta;
+                tick.Accumulator = Math.Min(tick.Accumulator, tick.ConfigData.MaxDelta);
                 
                 // Set interpolation value
-                tick.InterpolationValue = Math.Min(tick.accumulator / tick.configData.Tickrate, 1);
+                tick.InterpolationValue = Math.Min(tick.Accumulator / tickrate, 1);
 
                 // If we've accumulated enough time, tick
-                while (tick.accumulator >= tickrate)
+                while (tick.Accumulator >= tickrate)
                 {
                     // Tick
-                    ((ITickInstance) tick).Tick(tickrate);
-                    tick.accumulator -= tickrate;
-                    tick.InterpolationValue = Math.Min(tick.accumulator / tick.configData.Tickrate, 1);
+                    ((ITick) tick).DoTick(tickrate);
+                    tick.Accumulator -= tickrate;
+                    tick.InterpolationValue = Math.Min(tick.Accumulator / tickrate, 1);
                 }
             }
         }
@@ -39,9 +39,9 @@ namespace GGSharpTick
         /// </summary>
         /// <param name="delta">Delta since last tick (seconds).</param>
         /// <param name="tick">The variable tick on which to operate.</param>
-        public static void ExecuteVariableTick(float delta, ITickInstance tick)
+        public static void ExecuteVariableTick(float delta, ITick tick)
         {
-            tick.Tick(delta);
+            tick.DoTick(delta);
         }
     }
 }

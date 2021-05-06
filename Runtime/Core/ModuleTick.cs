@@ -3,27 +3,27 @@ using GGSharpData;
 
 namespace GGSharpTick
 {
-    //Core from: 
+    //Inspo from: 
     //https://forum.unity.com/threads/writing-update-manager-what-should-i-know.402571/
     
     /// <summary>
     /// Implementation of ICoreTick interface
     /// </summary>
-    public class CoreTick : CoreSystemBase<CoreTickSystemConfigData>, ICoreTick
+    public class ModuleTick : Module<DataConfigModuleTick>, IModuleTick
     {
         #region VARIABLES
         
         // Properties
         public TickVariable[] VariableTicks { get; }
         public TickFixed[] FixedTicks { get; }
-        public TimeSpan ElapsedSinceSimStartup { get; private set; }
+        public TimeSpan TimeElapsed { get; private set; }
 
         #endregion VARIABLES
         
         
         #region CONSTRUCTION
 
-        public CoreTick(CoreTickSystemConfigData data, ICoreSystemClientTick client = null) : base(data)
+        public ModuleTick(DataConfigModuleTick data, IModuleClientTick client = null) : base(data)
         {
             // Make sure we have valid ticking data
             if (!CoreTickValidationUtility.ValidateCoreTickSystemConfigData(data))
@@ -44,7 +44,7 @@ namespace GGSharpTick
             }
             
             // Tell the client we're finished
-            client?.OnSystemTickInitialized(VariableTicks, FixedTicks);
+            client?.OnModuleInitialized(VariableTicks, FixedTicks);
         }
 
         #endregion CONSTRUCTION
@@ -52,12 +52,12 @@ namespace GGSharpTick
 
         #region REGISTRATION
 
-        void ICoreTick.Register(ITickClient obj, ITicksetInstance tickset)
+        void IModuleTick.Register(ITickClient obj, ITickset tickset)
         {
             tickset?.StageForAddition(obj);
         }
 
-        void ICoreTick.Unregister(ITickClient obj, ITicksetInstance tickset)
+        void IModuleTick.Unregister(ITickClient obj, ITickset tickset)
         {
             tickset?.StageForRemoval(obj);
         }
@@ -67,22 +67,21 @@ namespace GGSharpTick
 
         #region SOURCE
 
-        void ICoreTick.DoTick(float delta, TickVariable tick)
+        void IModuleTick.DoTick(float delta, TickVariable tick)
         {
-            // Validate delta data
+            // Validate delta interval data
             if (!CoreTickValidationUtility.ValidateDeltaInterval(delta))
                 return;
 
-            // Null check
             if (tick == null)
             {
                 tick = VariableTicks[0];
             }
             
-            // Are we also ticking fixed step?
-            if (tick.fixedStep)
+            // We can optionally drive the execution of fixed ticks using this tick as the driving clock
+            if (tick.FixedStep)
             {
-                ElapsedSinceSimStartup += TimeSpan.FromSeconds(delta);
+                TimeElapsed += TimeSpan.FromSeconds(delta);
                 TickExecutorUtility.ExecuteFixedTicks(delta, FixedTicks);
             }
             

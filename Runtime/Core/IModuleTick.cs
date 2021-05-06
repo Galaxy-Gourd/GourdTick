@@ -4,9 +4,9 @@ using GGSharpData;
 namespace GGSharpTick
 {
     /// <summary>
-    /// Describes client-facing API for core tick system
+    /// Describes client-facing API for core tick module
     /// </summary>
-    public interface ICoreTick : ICoreSystem
+    public interface IModuleTick : IModule
     {
         #region Properties
 
@@ -23,7 +23,7 @@ namespace GGSharpTick
         /// <summary>
         /// The amount of time elapsed since the simulation began.
         /// </summary>
-        TimeSpan ElapsedSinceSimStartup { get; }
+        TimeSpan TimeElapsed { get; }
 
         #endregion Properties
 
@@ -35,14 +35,14 @@ namespace GGSharpTick
         /// </summary>
         /// <param name="obj">The client being registered.</param>
         /// <param name="tickset">The tickset to which to register the client.</param>
-        void Register(ITickClient obj, ITicksetInstance tickset);
+        void Register(ITickClient obj, ITickset tickset);
 
         /// <summary>
         /// Unregisters a client from a tickset.
         /// </summary>
         /// <param name="obj">The client being unregistered.</param>
         /// <param name="tickset">The tickset from which to unregister the client.</param>
-        void Unregister(ITickClient obj, ITicksetInstance tickset);
+        void Unregister(ITickClient obj, ITickset tickset);
 
         /// <summary>
         /// Ticks the core tick system with the given delta time.

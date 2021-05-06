@@ -5,24 +5,24 @@ namespace GGSharpTick
     /// <summary>
     /// Defines contract for an instance of a TickBase (TickRender or TickSimulation) 
     /// </summary>
-    public interface ITickInstance
+    public interface ITick
     {
-        #region Properties
+        #region PROPERTIES
 
         /// <summary>
         /// The ticksets that belong to this tick
         /// </summary>
-        List<ITicksetInstance> ticksets { get; }
+        List<ITickset> Ticksets { get; }
 
         /// <summary>
         /// How many ticks have been executed thus far.
         /// </summary>
-        uint tickCount { get; }
+        uint TickCount { get; }
         
         /// <summary>
         /// FPS of this tick
         /// </summary>
-        float ticksPerSecond { get; }
+        float TicksPerSecond { get; }
         
         /// <summary>
         /// The name of the tick
@@ -34,17 +34,17 @@ namespace GGSharpTick
         /// </summary>
         float InterpolationValue { get; }
 
-        #endregion Properties
+        #endregion PROPERTIES
 
 
-        #region Methods
+        #region METHODS
 
         /// <summary>
         /// Executes a tick of the tick instance (ticks every tickset).
         /// </summary>
         /// <param name="delta">Time elapsed (seconds) since previous tick.</param>
-        void Tick(float delta);
+        void DoTick(float delta);
         
-        #endregion Methods
+        #endregion METHODS
     }
 }

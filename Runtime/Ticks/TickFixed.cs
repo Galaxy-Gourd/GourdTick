@@ -2,30 +2,30 @@ using System.Collections.Generic;
 
 namespace GGSharpTick
 {
-    public sealed class TickFixed : TickBase
+    public sealed class TickFixed : Tick
     {
         #region Variables
 
         /// <summary>
         /// The configuration data for this tick
         /// </summary>
-        internal readonly TickFixedConfigData configData;
+        internal readonly DataConfigTickFixed ConfigData;
 
         /// <summary>
         /// Accumulates delta time and processes correct number of fixed ticks
         /// </summary>
-        internal float accumulator { get; set; }
+        internal float Accumulator { get; set; }
         
         #endregion Variables
 
 
         #region Constructor
 
-        public TickFixed(TickFixedConfigData data)
+        public TickFixed(DataConfigTickFixed data)
         {
-            configData = data;
-            TickName = data.tickName;
-            SetTicksets(data.ticksets);
+            ConfigData = data;
+            TickName = data.TickName;
+            SetTicksets(data.Ticksets);
         }
 
         #endregion Constructor
@@ -37,15 +37,15 @@ namespace GGSharpTick
         /// Creates and sets the ticksets to be used in this tick.
         /// </summary>
         /// <param name="ticksetsData">The data from which to create the ticksets.</param>
-        private void SetTicksets(IEnumerable<TicksetConfigData> ticksetsData)
+        private void SetTicksets(IEnumerable<DataConfigTickset> ticksetsData)
         {
-            ticksets = new List<ITicksetInstance>();
+            Ticksets = new List<ITickset>();
             
             // Add explicit ticksets
-            foreach (TicksetConfigData tick in ticksetsData)
+            foreach (DataConfigTickset tick in ticksetsData)
             {
                 TicksetFixed t = new TicksetFixed(tick, this);
-                ticksets.Add(t);
+                Ticksets.Add(t);
             }
         }
 

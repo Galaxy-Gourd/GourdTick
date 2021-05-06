@@ -13,7 +13,7 @@ namespace GGSharpTick
         /// <param name="data">The data to validate.</param>
         /// <returns>True if validation passes.</returns>
         /// <exception cref="NullReferenceException">Throws when any part of tick system data is null.</exception>
-        public static bool ValidateCoreTickSystemConfigData(CoreTickSystemConfigData data)
+        public static bool ValidateCoreTickSystemConfigData(DataConfigModuleTick data)
         {
             if (data == null)
             {
@@ -47,7 +47,8 @@ namespace GGSharpTick
             if (delta <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(delta), 
-                    "Tick delta intervals must be greater than zero!");
+                    "Tick delta intervals must be greater than zero! Interval was:\n" 
+                    + delta);
             }
             return true;
         }

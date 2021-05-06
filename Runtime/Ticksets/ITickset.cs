@@ -1,25 +1,25 @@
 namespace GGSharpTick
 {
-    public interface ITicksetInstance
+    public interface ITickset
     {
-        #region Properties
+        #region PROPERTIES
 
-        TickBase tick { get; }
+        Tick tick { get; }
         
         /// <summary>
         /// How many clients are current subscribed to this tickset.
         /// </summary>
-        public int subscriberCount { get; }
+        int SubscriberCount { get; }
         
         /// <summary>
         /// The display/debug name of this tickset
         /// </summary>
-        public string ticksetName { get; }
+        string TicksetName { get; }
 
-        #endregion Properties
+        #endregion PROPERTIES
 
 
-        #region Methods
+        #region METHODS
 
         /// <summary>
         /// 
@@ -37,8 +37,8 @@ namespace GGSharpTick
         /// 
         /// </summary>
         /// <param name="delta"></param>
-        void Tick(float delta);
+        void DoTick(float delta);
 
-        #endregion Methods
+        #endregion METHODS
     }
 }

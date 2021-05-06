@@ -1,12 +1,12 @@
 namespace GGSharpTick
 {
-    public class TicksetFixed: TicksetBase
+    public class TicksetFixed: Tickset
     {
         #region Constructor
 
-        public TicksetFixed(TicksetConfigData data, TickFixed t)
+        public TicksetFixed(DataConfigTickset data, TickFixed t)
         {
-            TicksetData = data;
+            _ticksetData = data;
             tick = t;
         }
 
@@ -18,9 +18,9 @@ namespace GGSharpTick
         /// <summary>
         /// Iterates through and ticks every ITickable assigned to this tickset.
         /// </summary>
-        public override void Tick(float delta)
+        public override void DoTick(float delta)
         {
-            base.Tick(delta);
+            base.DoTick(delta);
             foreach (var tickClient in _current)
             {
                 var obj = (ITickClientFixed) tickClient;

@@ -2,25 +2,25 @@ using System.Collections.Generic;
 
 namespace GGSharpTick
 {
-    public class TickVariable : TickBase
+    public sealed class TickVariable : Tick
     {
         #region Variables
 
         /// <summary>
         /// 
         /// </summary>
-        internal bool fixedStep { get; }
+        internal bool FixedStep { get; }
 
         #endregion Variables
         
         
         #region Constructor
 
-        public TickVariable(TickVariableConfigData data)
+        public TickVariable(DataConfigTickVariable data)
         {
-            fixedStep = data.StepFixed;
-            TickName = data.tickName;
-            SetTicksets(data.ticksets);
+            FixedStep = data.StepFixed;
+            TickName = data.TickName;
+            SetTicksets(data.Ticksets);
         }
 
         #endregion Constructor
@@ -32,13 +32,13 @@ namespace GGSharpTick
         /// Creates and sets the ticksets to be used in this tick.
         /// </summary>
         /// <param name="ticksetsData">The data from which to create the ticksets.</param>
-        private void SetTicksets(IEnumerable<TicksetConfigData> ticksetsData)
+        private void SetTicksets(IEnumerable<DataConfigTickset> ticksetsData)
         {
-            ticksets = new List<ITicksetInstance>();
-            foreach (TicksetConfigData tick in ticksetsData)
+            Ticksets = new List<ITickset>();
+            foreach (DataConfigTickset tick in ticksetsData)
             {
                 TicksetVariable t = new TicksetVariable(tick, this);
-                ticksets.Add(t);
+                Ticksets.Add(t);
             }
         }
 
