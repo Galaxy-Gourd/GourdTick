@@ -11,19 +11,9 @@ namespace GGSharpTick
         #region Properties
 
         /// <summary>
-        /// The variable ticks.
+        /// 
         /// </summary>
-        TickVariable[] VariableTicks { get; }
-        
-        /// <summary>
-        /// List of fixed (simulation) ticks
-        /// </summary>
-        TickFixed[] FixedTicks { get; }
-        
-        /// <summary>
-        /// The amount of time elapsed since the simulation began.
-        /// </summary>
-        TimeSpan TimeElapsed { get; }
+        ITelemetry<DataTelemetryTick> Telemetry { get; }
 
         #endregion Properties
 

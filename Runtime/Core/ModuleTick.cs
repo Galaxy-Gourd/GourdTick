@@ -14,9 +14,10 @@ namespace GGSharpTick
         #region VARIABLES
         
         // Properties
-        public TickVariable[] VariableTicks { get; }
-        public TickFixed[] FixedTicks { get; }
-        public TimeSpan TimeElapsed { get; private set; }
+        public ITelemetry<DataTelemetryTick> Telemetry { get; }
+        internal TickVariable[] VariableTicks { get; }
+        internal TickFixed[] FixedTicks { get; }
+        internal TimeSpan TimeElapsed { get; private set; }
 
         #endregion VARIABLES
         
@@ -43,8 +44,16 @@ namespace GGSharpTick
                 FixedTicks[i] = new TickFixed(data.FixedTicks[i]);
             }
             
+            // Temporary: create telemetry module
+            Telemetry = new TelemetryTick();
+            
             // Tell the client we're finished
-            client?.OnModuleInitialized(VariableTicks, FixedTicks);
+            client?.OnModuleInitialized(new DataModuleInitializationTick
+            {
+                Module = this,
+                FixedTicks = this.FixedTicks,
+                VariableTicks = this.VariableTicks
+            });
         }
 
         #endregion CONSTRUCTION
@@ -86,6 +95,9 @@ namespace GGSharpTick
             }
             
             TickExecutorUtility.ExecuteVariableTick(delta, tick);
+            
+            // Telemetry
+            (Telemetry as TelemetryTick).Broadcast(this);
         }
 
         #endregion SOURCE
