@@ -1,6 +1,6 @@
 namespace GGSharpTick
 {
-    public interface ITickClientFixed : ITickClient
+    public interface IClientTickableFixed : IClientTickable
     {
         /// <summary>
         /// Ticks the fixed client.

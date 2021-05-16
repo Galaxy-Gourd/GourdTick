@@ -1,4 +1,3 @@
-using System;
 using GGSharpData;
 
 namespace GGSharpTick
@@ -8,31 +7,31 @@ namespace GGSharpTick
     /// </summary>
     public interface IModuleTick : IModule
     {
-        #region Properties
+        #region PROPERTIES
 
         /// <summary>
-        /// 
+        /// Telemetry data for this ticking module
         /// </summary>
         ITelemetry<DataTelemetryTick> Telemetry { get; }
 
-        #endregion Properties
+        #endregion PROPERTIES
 
 
-        #region Methods
+        #region METHODS
 
         /// <summary>
         /// Registers a client to a tickset.
         /// </summary>
         /// <param name="obj">The client being registered.</param>
         /// <param name="tickset">The tickset to which to register the client.</param>
-        void Register(ITickClient obj, ITickset tickset);
+        void Register(IClientTickable obj, ITickset tickset);
 
         /// <summary>
         /// Unregisters a client from a tickset.
         /// </summary>
         /// <param name="obj">The client being unregistered.</param>
         /// <param name="tickset">The tickset from which to unregister the client.</param>
-        void Unregister(ITickClient obj, ITickset tickset);
+        void Unregister(IClientTickable obj, ITickset tickset);
 
         /// <summary>
         /// Ticks the core tick system with the given delta time.
@@ -41,6 +40,6 @@ namespace GGSharpTick
         /// <param name="tick"></param>
         void DoTick(float delta, TickVariable tick = null);
 
-        #endregion Methods
+        #endregion METHODS
     }
 }

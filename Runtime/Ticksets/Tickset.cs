@@ -15,29 +15,29 @@ namespace GGSharpTick
         /// <summary>
         /// The list of current clients subscribed to this tickset.
         /// </summary>
-        protected readonly List<ITickClient> _current = new List<ITickClient>();
+        protected readonly List<IClientTickable> _current = new List<IClientTickable>();
         
         /// <summary>
         /// 
         /// </summary>
-        private readonly List<ITickClient> _stagedForAddition = new List<ITickClient>();
+        private readonly List<IClientTickable> _stagedForAddition = new List<IClientTickable>();
         
         /// <summary>
         /// 
         /// </summary>
-        private readonly List<ITickClient> _stagedForRemoval = new List<ITickClient>();
+        private readonly List<IClientTickable> _stagedForRemoval = new List<IClientTickable>();
 
         #endregion Variables
         
 
         #region Tick
 
-        void ITickset.StageForAddition(ITickClient client)
+        void ITickset.StageForAddition(IClientTickable client)
         {
             _stagedForAddition.Add(client);
         }
 
-        void ITickset.StageForRemoval(ITickClient client)
+        void ITickset.StageForRemoval(IClientTickable client)
         {
             _stagedForRemoval.Add(client);
         }
@@ -47,7 +47,7 @@ namespace GGSharpTick
         /// </summary>
         private void AddStagedTickables()
         {
-            foreach (ITickClient t in _stagedForAddition)
+            foreach (IClientTickable t in _stagedForAddition)
             {
                 _current.Add(t);
             }
@@ -61,7 +61,7 @@ namespace GGSharpTick
         /// </summary>
         private void FlushStagedTickables()
         {
-            foreach (ITickClient t in _stagedForRemoval)
+            foreach (IClientTickable t in _stagedForRemoval)
             {
                 _current.Remove(t);
             }

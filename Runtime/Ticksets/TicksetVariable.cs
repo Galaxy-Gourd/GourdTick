@@ -23,7 +23,7 @@ namespace GGSharpTick
             base.DoTick(delta);
             foreach (var tickClient in _current)
             {
-                var obj = (ITickClientVariable) tickClient;
+                var obj = (IClientTickableVariable) tickClient;
                 obj.Tick(delta);
             }
         }

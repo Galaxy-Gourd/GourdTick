@@ -44,7 +44,7 @@ namespace GGSharpTick
                 FixedTicks[i] = new TickFixed(data.FixedTicks[i]);
             }
             
-            // Temporary: create telemetry module
+            // Create telemetry module
             Telemetry = new TelemetryTick();
             
             // Tell the client we're finished
@@ -61,12 +61,12 @@ namespace GGSharpTick
 
         #region REGISTRATION
 
-        void IModuleTick.Register(ITickClient obj, ITickset tickset)
+        void IModuleTick.Register(IClientTickable obj, ITickset tickset)
         {
             tickset?.StageForAddition(obj);
         }
 
-        void IModuleTick.Unregister(ITickClient obj, ITickset tickset)
+        void IModuleTick.Unregister(IClientTickable obj, ITickset tickset)
         {
             tickset?.StageForRemoval(obj);
         }
@@ -96,7 +96,7 @@ namespace GGSharpTick
             
             TickExecutorUtility.ExecuteVariableTick(delta, tick);
             
-            // Telemetry
+            // Update telemetry
             (Telemetry as TelemetryTick).Broadcast(this);
         }
 

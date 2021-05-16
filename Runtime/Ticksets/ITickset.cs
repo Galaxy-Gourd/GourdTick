@@ -25,13 +25,13 @@ namespace GGSharpTick
         /// 
         /// </summary>
         /// <param name="client"></param>
-        void StageForAddition(ITickClient client);
+        void StageForAddition(IClientTickable client);
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="client"></param>
-        void StageForRemoval(ITickClient client);
+        void StageForRemoval(IClientTickable client);
         
         /// <summary>
         /// 

@@ -1,6 +1,6 @@
 namespace GGSharpTick
 {
-    public interface ITickClient
+    public interface IClientTickable
     {
         
     }
