@@ -1,7 +1,7 @@
 using System;
-using GGSharpData;
+using GG.Data.Base;
 
-namespace GGSharpTick
+namespace GG.Tick.Base
 {
     public class DataModuleInitializationTick : DataModuleInitialization
     {

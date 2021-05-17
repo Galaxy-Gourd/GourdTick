@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using GGSharpData;
+using GG.Data.Base;
 
-namespace GGSharpTick
+namespace GG.Tick.Base
 {
     public class DataTelemetryTick : DataTelemetry
     {

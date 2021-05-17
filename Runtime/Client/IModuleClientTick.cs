@@ -1,6 +1,6 @@
-using GGSharpData;
+using GG.Data.Base;
 
-namespace GGSharpTick
+namespace GG.Tick.Base
 {
     public interface IModuleClientTick : IModuleClient
     {

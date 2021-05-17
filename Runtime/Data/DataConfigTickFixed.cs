@@ -1,4 +1,4 @@
-namespace GGSharpTick
+namespace GG.Tick.Base
 {
     public class DataConfigTickFixed : DataConfigTick
     {

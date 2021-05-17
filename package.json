@@ -1,11 +1,11 @@
 {
-  "name": "com.galaxygourd.ggsharptick",
+  "name": "com.galaxygourd.ggtickbase",
   "version": "1.0.0",
-  "displayName": "GG Sharp Tick",
+  "displayName": "GG Tick Base",
   "description": "C# ticking system.",
   "unity": "2019.4",
   "dependencies": {
-    "com.galaxygourd.ggsharpdata": "1.0.0"
+    "com.galaxygourd.ggdatabase": "1.0.0"
   },
   "author": {
     "name": "Galaxy Gourd",

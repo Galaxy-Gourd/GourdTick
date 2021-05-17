@@ -1,7 +1,7 @@
 using System;
-using GGSharpData;
+using GG.Data.Base;
 
-namespace GGSharpTick
+namespace GG.Tick.Base
 {
     //Inspo from: 
     //https://forum.unity.com/threads/writing-update-manager-what-should-i-know.402571/

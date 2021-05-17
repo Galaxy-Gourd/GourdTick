@@ -1,6 +1,6 @@
 using System;
 
-namespace GGSharpTick
+namespace GG.Tick.Base
 {
     /// <summary>
     /// Helps validate tick system data.

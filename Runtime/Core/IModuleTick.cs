@@ -1,6 +1,6 @@
-using GGSharpData;
+using GG.Data.Base;
 
-namespace GGSharpTick
+namespace GG.Tick.Base
 {
     /// <summary>
     /// Describes client-facing API for core tick module
