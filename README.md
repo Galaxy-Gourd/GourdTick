@@ -1,2 +1,2 @@
-# SharpTick
+# GGTickBase
 Core GG tick system.
