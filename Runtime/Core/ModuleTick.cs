@@ -24,36 +24,49 @@ namespace GG.Tick.Base
         
         #region CONSTRUCTION
 
-        public ModuleTick(DataConfigModuleTick data, IModuleClientTick client = null) : base(data)
+        public ModuleTick
+        (DataConfigModuleTick data,
+         Action<DataModuleInitializationTick>[] callbacks = null)
+            : base(data)
         {
             // Make sure we have valid ticking data
             if (!CoreTickValidationUtility.ValidateCoreTickSystemConfigData(data))
                 return;
-            
+
             // Create variable ticks
             VariableTicks = new TickVariable[data.VariableTicks.Length];
-            for(int i = 0; i < data.VariableTicks.Length; i++)
+            for (int i = 0; i < data.VariableTicks.Length; i++)
             {
                 VariableTicks[i] = new TickVariable(data.VariableTicks[i]);
             }
-            
+
             // Create fixed ticks
             FixedTicks = new TickFixed[data.FixedTicks.Length];
-            for(int i = 0; i < data.FixedTicks.Length; i++)
+            for (int i = 0; i < data.FixedTicks.Length; i++)
             {
                 FixedTicks[i] = new TickFixed(data.FixedTicks[i]);
             }
-            
+
             // Create telemetry module
             Telemetry = new TelemetryTick();
-            
-            // Tell the client we're finished
-            client?.OnModuleInitialized(new DataModuleInitializationTick
+
+            // We need to tell Unity-side that we're finished over here
+            if (callbacks != null)
             {
-                Module = this,
-                FixedTicks = this.FixedTicks,
-                VariableTicks = this.VariableTicks
-            });
+                // Set init data
+                DataModuleInitializationTick initData = new DataModuleInitializationTick
+                {
+                    Module = this,
+                    FixedTicks = FixedTicks,
+                    VariableTicks = VariableTicks
+                };
+
+                // Send callbacks
+                foreach (Action<DataModuleInitializationTick> callback in callbacks)
+                {
+                    callback.Invoke(initData);
+                }
+            }
         }
 
         #endregion CONSTRUCTION

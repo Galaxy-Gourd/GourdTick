@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GG.Tick.Base
 {
-    public abstract class Tickset : ITickset
+    internal abstract class Tickset : ITickset
     {
         #region Variables
 

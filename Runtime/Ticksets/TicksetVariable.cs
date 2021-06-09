@@ -1,6 +1,6 @@
 namespace GG.Tick.Base
 {
-    public class TicksetVariable : Tickset
+    internal class TicksetVariable : Tickset
     {
         #region Constructor
 

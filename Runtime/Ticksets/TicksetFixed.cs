@@ -1,10 +1,10 @@
 namespace GG.Tick.Base
 {
-    public class TicksetFixed: Tickset
+    internal class TicksetFixed: Tickset
     {
         #region Constructor
 
-        public TicksetFixed(DataConfigTickset data, TickFixed t)
+        internal TicksetFixed(DataConfigTickset data, TickFixed t)
         {
             _ticksetData = data;
             tick = t;

@@ -5,7 +5,7 @@ namespace GG.Tick.Base
     /// <summary>
     /// Helps validate tick system data.
     /// </summary>
-    public static class CoreTickValidationUtility
+    internal static class CoreTickValidationUtility
     {
         /// <summary>
         /// Ensures that valid data is passed into the core tick system.
@@ -13,7 +13,7 @@ namespace GG.Tick.Base
         /// <param name="data">The data to validate.</param>
         /// <returns>True if validation passes.</returns>
         /// <exception cref="NullReferenceException">Throws when any part of tick system data is null.</exception>
-        public static bool ValidateCoreTickSystemConfigData(DataConfigModuleTick data)
+        internal static bool ValidateCoreTickSystemConfigData(DataConfigModuleTick data)
         {
             if (data == null)
             {
@@ -42,7 +42,7 @@ namespace GG.Tick.Base
         /// <param name="delta">The given delta interval.</param>
         /// <returns>True if validation passes.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when validation fails.</exception>
-        public static bool ValidateDeltaInterval(double delta)
+        internal static bool ValidateDeltaInterval(double delta)
         {
             if (delta <= 0)
             {

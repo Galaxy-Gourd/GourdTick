@@ -5,14 +5,14 @@ namespace GG.Tick.Base
     /// <summary>
     /// Executes ticks across existing tick instances + ticksets.
     /// </summary>
-    public static class TickExecutorUtility
+    internal static class TickExecutorUtility
     {
         /// <summary>
         /// Ticks fixed.
         /// </summary>
         /// <param name="delta">Delta since last tick (seconds).</param>
         /// <param name="ticks">The fixed ticks on which to execute.</param>
-        public static void ExecuteFixedTicks(float delta, TickFixed[] ticks)
+        internal static void ExecuteFixedTicks(float delta, TickFixed[] ticks)
         {
             foreach (TickFixed tick in ticks)
             {
@@ -39,7 +39,7 @@ namespace GG.Tick.Base
         /// </summary>
         /// <param name="delta">Delta since last tick (seconds).</param>
         /// <param name="tick">The variable tick on which to operate.</param>
-        public static void ExecuteVariableTick(float delta, ITick tick)
+        internal static void ExecuteVariableTick(float delta, ITick tick)
         {
             tick.DoTick(delta);
         }
