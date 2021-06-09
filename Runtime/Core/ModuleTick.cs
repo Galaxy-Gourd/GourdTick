@@ -9,14 +9,14 @@ namespace GG.Tick.Base
     /// <summary>
     /// Implementation of ICoreTick interface
     /// </summary>
-    public class ModuleTick : Module<DataConfigModuleTick>, IModuleTick
+    public class ModuleTick : Module<DataConfigModuleTick, DataModuleInitializationTick>, IModuleTick
     {
         #region VARIABLES
         
         // Properties
         public ITelemetry<DataTelemetryTick> Telemetry { get; }
-        internal TickVariable[] VariableTicks { get; }
-        internal TickFixed[] FixedTicks { get; }
+        private TickVariable[] VariableTicks { get; }
+        private TickFixed[] FixedTicks { get; }
         internal TimeSpan TimeElapsed { get; private set; }
 
         #endregion VARIABLES
@@ -24,10 +24,10 @@ namespace GG.Tick.Base
         
         #region CONSTRUCTION
 
-        public ModuleTick
-        (DataConfigModuleTick data,
-         Action<DataModuleInitializationTick>[] callbacks = null)
-            : base(data)
+        public ModuleTick(
+            DataConfigModuleTick data,
+            Action<DataModuleInitializationTick>[] callbacks = null)
+            : base(data, callbacks)
         {
             // Make sure we have valid ticking data
             if (!CoreTickValidationUtility.ValidateCoreTickSystemConfigData(data))
@@ -51,22 +51,12 @@ namespace GG.Tick.Base
             Telemetry = new TelemetryTick();
 
             // We need to tell Unity-side that we're finished over here
-            if (callbacks != null)
+            DispatchModuleInitializationCallbacks(new DataModuleInitializationTick
             {
-                // Set init data
-                DataModuleInitializationTick initData = new DataModuleInitializationTick
-                {
-                    Module = this,
-                    FixedTicks = FixedTicks,
-                    VariableTicks = VariableTicks
-                };
-
-                // Send callbacks
-                foreach (Action<DataModuleInitializationTick> callback in callbacks)
-                {
-                    callback.Invoke(initData);
-                }
-            }
+                Module = this,
+                FixedTicks = FixedTicks,
+                VariableTicks = VariableTicks
+            });
         }
 
         #endregion CONSTRUCTION
