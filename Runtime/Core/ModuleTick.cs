@@ -76,6 +76,13 @@ namespace GG.Tick.Base
 
         #endregion REGISTRATION
         
+        
+        #region TICK
+
+        void IModule.Tick(float delta) { }
+
+        #endregion TICK
+        
 
         #region SOURCE
 
