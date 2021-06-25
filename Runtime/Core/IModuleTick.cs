@@ -33,13 +33,6 @@ namespace GG.Tick.Base
         /// <param name="tickset">The tickset from which to unregister the client.</param>
         void Unregister(IClientTickable obj, ITickset tickset);
 
-        /// <summary>
-        /// Ticks the core tick system with the given delta time.
-        /// </summary>
-        /// <param name="delta">Time elapsed since the previous tick.</param>
-        /// <param name="tick"></param>
-        void DoTick(float delta, TickVariable tick = null);
-
         #endregion METHODS
     }
 }

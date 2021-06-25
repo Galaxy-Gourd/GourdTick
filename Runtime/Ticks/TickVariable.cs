@@ -4,29 +4,18 @@ namespace GG.Tick.Base
 {
     public sealed class TickVariable : Tick
     {
-        #region Variables
-
-        /// <summary>
-        /// 
-        /// </summary>
-        internal bool FixedStep { get; }
-
-        #endregion Variables
-        
-        
-        #region Constructor
+        #region CONSTRUCTION
 
         public TickVariable(DataConfigTickVariable data)
         {
-            FixedStep = data.StepFixed;
             TickName = data.TickName;
             SetTicksets(data.Ticksets);
         }
 
-        #endregion Constructor
+        #endregion CONSTRUCTION
 
 
-        #region Ticksets
+        #region TICKSETS
 
         /// <summary>
         /// Creates and sets the ticksets to be used in this tick.
@@ -42,6 +31,6 @@ namespace GG.Tick.Base
             }
         }
 
-        #endregion Ticksets
+        #endregion TICKSETS
     }
 }

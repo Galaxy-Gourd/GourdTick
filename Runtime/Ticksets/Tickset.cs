@@ -4,7 +4,7 @@ namespace GG.Tick.Base
 {
     internal abstract class Tickset : ITickset
     {
-        #region Variables
+        #region VARIABLES
 
         public Tick tick { get; protected set; }
         public int SubscriberCount { get; private set; }
@@ -27,10 +27,10 @@ namespace GG.Tick.Base
         /// </summary>
         private readonly List<IClientTickable> _stagedForRemoval = new List<IClientTickable>();
 
-        #endregion Variables
+        #endregion VARIABLES
         
 
-        #region Tick
+        #region TICK
 
         void ITickset.StageForAddition(IClientTickable client)
         {
@@ -80,6 +80,6 @@ namespace GG.Tick.Base
             FlushStagedTickables();
         }
 
-        #endregion Tick
+        #endregion TICK
     }
 }

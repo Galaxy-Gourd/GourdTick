@@ -1,5 +1,6 @@
 using System;
 using GG.Data.Base;
+using UnityEngine;
 
 namespace GG.Tick.Base
 {
@@ -15,8 +16,8 @@ namespace GG.Tick.Base
         
         // Properties
         public ITelemetry<DataTelemetryTick> Telemetry { get; }
-        private TickVariable[] VariableTicks { get; }
-        private TickFixed[] FixedTicks { get; }
+        private readonly TickVariable _tick;
+        private readonly TickFixed[] _fixedTicks;
         internal TimeSpan TimeElapsed { get; private set; }
 
         #endregion VARIABLES
@@ -32,19 +33,15 @@ namespace GG.Tick.Base
             // Make sure we have valid ticking data
             if (!CoreTickValidationUtility.ValidateCoreTickSystemConfigData(data))
                 return;
-
-            // Create variable ticks
-            VariableTicks = new TickVariable[data.VariableTicks.Length];
-            for (int i = 0; i < data.VariableTicks.Length; i++)
-            {
-                VariableTicks[i] = new TickVariable(data.VariableTicks[i]);
-            }
+            
+            // Create variable tick for this module
+            _tick = new TickVariable(data.Tick);
 
             // Create fixed ticks
-            FixedTicks = new TickFixed[data.FixedTicks.Length];
+            _fixedTicks = new TickFixed[data.FixedTicks.Length];
             for (int i = 0; i < data.FixedTicks.Length; i++)
             {
-                FixedTicks[i] = new TickFixed(data.FixedTicks[i]);
+                _fixedTicks[i] = new TickFixed(data.FixedTicks[i]);
             }
 
             // Create telemetry module
@@ -54,12 +51,34 @@ namespace GG.Tick.Base
             DispatchModuleInitializationCallbacks(new DataModuleInitializationTick
             {
                 Module = this,
-                FixedTicks = FixedTicks,
-                VariableTicks = VariableTicks
+                Tick = _tick,
+                FixedTicks = _fixedTicks
             });
         }
 
         #endregion CONSTRUCTION
+        
+        
+        #region TICK
+
+        public override void Tick(float delta)
+        {
+            base.Tick(delta);
+            
+            // Validate delta interval data
+            if (!CoreTickValidationUtility.ValidateDeltaInterval(delta))
+                return;
+
+            // We drive the execution of fixed ticks using this tick as the driving clock
+            TimeElapsed += TimeSpan.FromSeconds(delta);
+            TickExecutorUtility.ExecuteFixedTicks(delta, _fixedTicks);
+            TickExecutorUtility.ExecuteVariableTick(delta, _tick);
+            
+            // Update telemetry
+            (Telemetry as TelemetryTick).Broadcast(this);
+        }
+
+        #endregion TICK
 
 
         #region REGISTRATION
@@ -75,41 +94,5 @@ namespace GG.Tick.Base
         }
 
         #endregion REGISTRATION
-        
-        
-        #region TICK
-
-        void IModule.Tick(float delta) { }
-
-        #endregion TICK
-        
-
-        #region SOURCE
-
-        void IModuleTick.DoTick(float delta, TickVariable tick)
-        {
-            // Validate delta interval data
-            if (!CoreTickValidationUtility.ValidateDeltaInterval(delta))
-                return;
-
-            if (tick == null)
-            {
-                tick = VariableTicks[0];
-            }
-            
-            // We can optionally drive the execution of fixed ticks using this tick as the driving clock
-            if (tick.FixedStep)
-            {
-                TimeElapsed += TimeSpan.FromSeconds(delta);
-                TickExecutorUtility.ExecuteFixedTicks(delta, FixedTicks);
-            }
-            
-            TickExecutorUtility.ExecuteVariableTick(delta, tick);
-            
-            // Update telemetry
-            (Telemetry as TelemetryTick).Broadcast(this);
-        }
-
-        #endregion SOURCE
     }
 }

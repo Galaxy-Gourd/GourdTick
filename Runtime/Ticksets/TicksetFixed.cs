@@ -2,7 +2,7 @@ namespace GG.Tick.Base
 {
     internal class TicksetFixed: Tickset
     {
-        #region Constructor
+        #region CONSTRUCTION
 
         internal TicksetFixed(DataConfigTickset data, TickFixed t)
         {
@@ -10,10 +10,10 @@ namespace GG.Tick.Base
             tick = t;
         }
 
-        #endregion Constructor
+        #endregion CONSTRUCTION
         
         
-        #region Tick
+        #region TICK
 
         /// <summary>
         /// Iterates through and ticks every ITickable assigned to this tickset.
@@ -21,13 +21,13 @@ namespace GG.Tick.Base
         public override void DoTick(float delta)
         {
             base.DoTick(delta);
-            foreach (var tickClient in _current)
+            foreach (IClientTickable tickClient in _current)
             {
-                var obj = (IClientTickableFixed) tickClient;
+                IClientTickableFixed obj = (IClientTickableFixed) tickClient;
                 obj.Tick(delta);
             }
         }
 
-        #endregion
+        #endregion TICK
     }
 }

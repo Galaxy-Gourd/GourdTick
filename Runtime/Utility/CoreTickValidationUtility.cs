@@ -21,10 +21,10 @@ namespace GG.Tick.Base
                     "Core tick system data cannot be null!");
             }
             
-            if (data.VariableTicks == null)
+            if (data.Tick == null)
             {
                 throw new NullReferenceException(
-                    "Core tick system variable ticks data cannot be null!");
+                    "Core tick system variable tick data cannot be null!");
             }
 
             if (data.FixedTicks == null)

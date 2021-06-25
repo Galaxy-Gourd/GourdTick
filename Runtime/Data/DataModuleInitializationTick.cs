@@ -5,7 +5,7 @@ namespace GG.Tick.Base
 {
     public class DataModuleInitializationTick : DataModuleInitialization
     {
-        public TickVariable[] VariableTicks;
+        public TickVariable Tick;
         public TickFixed[] FixedTicks;
     }
 }
