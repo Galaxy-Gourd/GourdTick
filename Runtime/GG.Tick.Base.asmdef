@@ -1,6 +1,6 @@
 {
     "name": "GG.Tick.Base",
-    "rootNamespace": "GG.Tick.Base",
+    "rootNamespace": "GGTIckBase",
     "references": [
         "GUID:afbc0cabfa5564f968a043e2e15a562d"
     ],

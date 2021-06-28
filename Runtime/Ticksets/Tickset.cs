@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using GG.Data.Base;
+using GGDataBase;
 
 namespace GGTickBase
 {

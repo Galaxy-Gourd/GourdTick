@@ -1,5 +1,5 @@
 using System;
-using GG.Data.Base;
+using GGDataBase;
 using UnityEngine;
 
 namespace GGTickBase
