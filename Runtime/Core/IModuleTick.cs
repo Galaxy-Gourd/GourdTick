@@ -1,6 +1,6 @@
 using GG.Data.Base;
 
-namespace GG.Tick.Base
+namespace GGTickBase
 {
     /// <summary>
     /// Describes client-facing API for core tick module
@@ -24,14 +24,14 @@ namespace GG.Tick.Base
         /// </summary>
         /// <param name="obj">The client being registered.</param>
         /// <param name="tickset">The tickset to which to register the client.</param>
-        void Register(IClientTickable obj, ITickset tickset);
+        void Register(IComponentUpdatable obj, ITickset tickset);
 
         /// <summary>
         /// Unregisters a client from a tickset.
         /// </summary>
         /// <param name="obj">The client being unregistered.</param>
         /// <param name="tickset">The tickset from which to unregister the client.</param>
-        void Unregister(IClientTickable obj, ITickset tickset);
+        void Unregister(IComponentUpdatable obj, ITickset tickset);
 
         #endregion METHODS
     }

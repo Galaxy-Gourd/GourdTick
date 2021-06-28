@@ -1,4 +1,4 @@
-namespace GG.Tick.Base
+namespace GGTickBase
 {
     public class DataConfigTickVariable : DataConfigTick
     {

@@ -1,6 +1,8 @@
-namespace GG.Tick.Base
+using GG.Data.Base;
+
+namespace GGTickBase
 {
-    public interface ITickset
+    public interface ITickset : IComponentUpdatable
     {
         #region PROPERTIES
 
@@ -25,19 +27,13 @@ namespace GG.Tick.Base
         /// 
         /// </summary>
         /// <param name="client"></param>
-        void StageForAddition(IClientTickable client);
+        void StageForAddition(IComponentUpdatable client);
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="client"></param>
-        void StageForRemoval(IClientTickable client);
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="delta"></param>
-        void DoTick(float delta);
+        void StageForRemoval(IComponentUpdatable client);
 
         #endregion METHODS
     }

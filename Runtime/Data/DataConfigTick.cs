@@ -1,6 +1,6 @@
 using GG.Data.Base;
 
-namespace GG.Tick.Base
+namespace GGTickBase
 {
     public abstract class DataConfigTick : DataConfig
     {

@@ -1,43 +1,43 @@
 using System.Collections.Generic;
+using GG.Data.Base;
 
-namespace GG.Tick.Base
+namespace GGTickBase
 {
-    internal abstract class Tickset : ITickset
+    internal class Tickset : ITickset
     {
         #region VARIABLES
 
-        public Tick tick { get; protected set; }
+        public Tick tick { get; }
         public int SubscriberCount { get; private set; }
         public string TicksetName => _ticksetData.TicksetName;
         
-        protected DataConfigTickset _ticksetData { get; set; }
-
-        /// <summary>
-        /// The list of current clients subscribed to this tickset.
-        /// </summary>
-        protected readonly List<IClientTickable> _current = new List<IClientTickable>();
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly List<IClientTickable> _stagedForAddition = new List<IClientTickable>();
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly List<IClientTickable> _stagedForRemoval = new List<IClientTickable>();
+        private readonly DataConfigTickset _ticksetData;
+        private readonly List<IComponentUpdatable> _current = new List<IComponentUpdatable>();
+        private readonly List<IComponentUpdatable> _stagedForAddition = new List<IComponentUpdatable>();
+        private readonly List<IComponentUpdatable> _stagedForRemoval = new List<IComponentUpdatable>();
 
         #endregion VARIABLES
+
+
+        #region CONSTRUCTION
+
+        public Tickset(DataConfigTickset ticksetData, Tick tick)
+        {
+            this.tick = tick;
+            _ticksetData = ticksetData;
+        }
+
+        #endregion CONSTRUCTION
         
 
-        #region TICK
+        #region STAGING
 
-        void ITickset.StageForAddition(IClientTickable client)
+        void ITickset.StageForAddition(IComponentUpdatable client)
         {
             _stagedForAddition.Add(client);
         }
 
-        void ITickset.StageForRemoval(IClientTickable client)
+        void ITickset.StageForRemoval(IComponentUpdatable client)
         {
             _stagedForRemoval.Add(client);
         }
@@ -47,7 +47,7 @@ namespace GG.Tick.Base
         /// </summary>
         private void AddStagedTickables()
         {
-            foreach (IClientTickable t in _stagedForAddition)
+            foreach (IComponentUpdatable t in _stagedForAddition)
             {
                 _current.Add(t);
             }
@@ -61,7 +61,7 @@ namespace GG.Tick.Base
         /// </summary>
         private void FlushStagedTickables()
         {
-            foreach (IClientTickable t in _stagedForRemoval)
+            foreach (IComponentUpdatable t in _stagedForRemoval)
             {
                 _current.Remove(t);
             }
@@ -69,17 +69,25 @@ namespace GG.Tick.Base
             SubscriberCount = _current.Count;
             _stagedForRemoval.Clear();
         }
+        
+        #endregion STAGING
 
-        /// <summary>
-        /// Iterates through and ticks every ITickable assigned to this tickset.
-        /// </summary>
-        public virtual void DoTick(float delta)
+
+        #region UPDATE
+
+        void IComponentUpdatable.DoUpdate(float delta)
         {
             // Add/remove staged ticks from group
             AddStagedTickables();
             FlushStagedTickables();
+            
+            // Update!
+            foreach (IComponentUpdatable component in _current)
+            {
+                component.DoUpdate(delta);
+            }
         }
 
-        #endregion TICK
+        #endregion UPDATE
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace GG.Tick.Base
+namespace GGTickBase
 {
     /// <summary>
     /// Executes ticks across existing tick instances + ticksets.
@@ -28,7 +28,7 @@ namespace GG.Tick.Base
                 while (tick.Accumulator >= tickrate)
                 {
                     // Tick
-                    ((ITick) tick).DoTick(tickrate);
+                    ((ITick) tick).DoUpdate(tickrate);
                     tick.Accumulator -= tickrate;
                     tick.InterpolationValue = Math.Min(tick.Accumulator / tickrate, 1);
                 }
@@ -42,7 +42,7 @@ namespace GG.Tick.Base
         /// <param name="tick">The variable tick on which to operate.</param>
         internal static void ExecuteVariableTick(float delta, ITick tick)
         {
-            tick.DoTick(delta);
+            tick.DoUpdate(delta);
         }
     }
 }

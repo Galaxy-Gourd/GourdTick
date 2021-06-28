@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using GG.Data.Base;
 
-namespace GG.Tick.Base
+namespace GGTickBase
 {
     internal class TelemetryTick : Telemetry<ModuleTick, DataTelemetryTick>
     {

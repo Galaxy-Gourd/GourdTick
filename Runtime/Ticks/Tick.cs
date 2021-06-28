@@ -1,36 +1,31 @@
 using System.Collections.Generic;
+using GG.Data.Base;
 
-namespace GG.Tick.Base
+namespace GGTickBase
 {
-    public abstract class Tick : ITick
+    public abstract class Tick : System<ITickset>, ITick
     {
-        #region Properties
+        #region VARIABLES
 
-        public List<ITickset> Ticksets { get; protected set; }
         public uint TickCount { get; private set; }
         public float TicksPerSecond { get; private set; }
         public string TickName { get; protected set; }
         public float InterpolationValue { get; internal set; }
 
-        #endregion Properties
-
-
-        #region Variables
-
         private const float CONST_tpsUpdateRate = 4.0f;
         private int _tpsFrameCount;
         private float _tpsAccumDelta;
 
-        #endregion Variables
+        #endregion VARIABLES
 
 
-        #region Tick
+        #region TICK
         
-        void ITick.DoTick(float delta)
+        void IComponentUpdatable.DoUpdate(float delta)
         {
-            foreach (ITickset ticksetInstance in Ticksets)
+            foreach (ITickset ticksetInstance in _components)
             {
-                ticksetInstance.DoTick(delta);
+                ticksetInstance.DoUpdate(delta);
             }
             
             CalculateTPS(delta);
@@ -53,6 +48,25 @@ namespace GG.Tick.Base
             }
         }
         
-        #endregion Tick
+        #endregion TICK
+        
+        
+        #region TICKSETS
+
+        /// <summary>
+        /// Creates and sets the ticksets to be used in this tick.
+        /// </summary>
+        /// <param name="ticksetsData">The data from which to create the ticksets.</param>
+        protected void SetTicksets(IEnumerable<DataConfigTickset> ticksetsData)
+        {
+            // Add explicit ticksets
+            foreach (DataConfigTickset tick in ticksetsData)
+            {
+                Tickset t = new Tickset(tick, this);
+                AddComponent(t);
+            }
+        }
+
+        #endregion TICKSETS
     }
 }

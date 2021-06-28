@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace GG.Tick.Base
+namespace GGTickBase
 {
     public sealed class TickFixed : Tick
     {
@@ -29,26 +27,5 @@ namespace GG.Tick.Base
         }
 
         #endregion Constructor
-        
-        
-        #region Ticksets
-
-        /// <summary>
-        /// Creates and sets the ticksets to be used in this tick.
-        /// </summary>
-        /// <param name="ticksetsData">The data from which to create the ticksets.</param>
-        private void SetTicksets(IEnumerable<DataConfigTickset> ticksetsData)
-        {
-            Ticksets = new List<ITickset>();
-            
-            // Add explicit ticksets
-            foreach (DataConfigTickset tick in ticksetsData)
-            {
-                TicksetFixed t = new TicksetFixed(tick, this);
-                Ticksets.Add(t);
-            }
-        }
-
-        #endregion Ticksets
     }
 }

@@ -2,7 +2,7 @@ using System;
 using GG.Data.Base;
 using UnityEngine;
 
-namespace GG.Tick.Base
+namespace GGTickBase
 {
     //Inspo from: 
     //https://forum.unity.com/threads/writing-update-manager-what-should-i-know.402571/
@@ -15,10 +15,11 @@ namespace GG.Tick.Base
         #region VARIABLES
         
         // Properties
-        public ITelemetry<DataTelemetryTick> Telemetry { get; }
+        public ITelemetry<DataTelemetryTick> Telemetry { get; }        
+        internal TimeSpan TimeElapsed { get; private set; }
+
         private readonly TickVariable _tick;
         private readonly TickFixed[] _fixedTicks;
-        internal TimeSpan TimeElapsed { get; private set; }
 
         #endregion VARIABLES
         
@@ -61,9 +62,9 @@ namespace GG.Tick.Base
         
         #region TICK
 
-        public override void Tick(float delta)
+        public override void DoUpdate(float delta)
         {
-            base.Tick(delta);
+            base.DoUpdate(delta);
             
             // Validate delta interval data
             if (!CoreTickValidationUtility.ValidateDeltaInterval(delta))
@@ -83,12 +84,12 @@ namespace GG.Tick.Base
 
         #region REGISTRATION
 
-        void IModuleTick.Register(IClientTickable obj, ITickset tickset)
+        void IModuleTick.Register(IComponentUpdatable obj, ITickset tickset)
         {
             tickset?.StageForAddition(obj);
         }
 
-        void IModuleTick.Unregister(IClientTickable obj, ITickset tickset)
+        void IModuleTick.Unregister(IComponentUpdatable obj, ITickset tickset)
         {
             tickset?.StageForRemoval(obj);
         }
