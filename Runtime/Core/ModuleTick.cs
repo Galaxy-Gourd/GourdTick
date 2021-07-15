@@ -10,51 +10,39 @@ namespace GGTickBase
     /// <summary>
     /// Implementation of ICoreTick interface
     /// </summary>
-    public class ModuleTick : Module<DataConfigModuleTick, DataModuleInitializationTick>, IModuleTick
+    public class ModuleTick : Module<DataConfigModuleTick>, IModuleTick
     {
         #region VARIABLES
         
         // Properties
+        public TickVariable Tick { get; }
+        public TickFixed[] FixedTicks { get; }
         public ITelemetry<DataTelemetryTick> Telemetry { get; }        
         internal TimeSpan TimeElapsed { get; private set; }
-
-        private readonly TickVariable _tick;
-        private readonly TickFixed[] _fixedTicks;
-
+        
         #endregion VARIABLES
         
         
         #region CONSTRUCTION
 
-        public ModuleTick(
-            DataConfigModuleTick data,
-            Action<DataModuleInitializationTick>[] callbacks = null)
-            : base(data, callbacks)
+        public ModuleTick(DataConfigModuleTick data) : base(data)
         {
             // Make sure we have valid ticking data
             if (!CoreTickValidationUtility.ValidateCoreTickSystemConfigData(data))
                 return;
             
             // Create variable tick for this module
-            _tick = new TickVariable(data.Tick);
+            Tick = new TickVariable(data.Tick);
 
             // Create fixed ticks
-            _fixedTicks = new TickFixed[data.FixedTicks.Length];
+            FixedTicks = new TickFixed[data.FixedTicks.Length];
             for (int i = 0; i < data.FixedTicks.Length; i++)
             {
-                _fixedTicks[i] = new TickFixed(data.FixedTicks[i]);
+                FixedTicks[i] = new TickFixed(data.FixedTicks[i]);
             }
 
             // Create telemetry module
             Telemetry = new TelemetryTick();
-
-            // We need to tell Unity-side that we're finished over here
-            DispatchModuleInitializationCallbacks(new DataModuleInitializationTick
-            {
-                Module = this,
-                Tick = _tick,
-                FixedTicks = _fixedTicks
-            });
         }
 
         #endregion CONSTRUCTION
@@ -72,8 +60,8 @@ namespace GGTickBase
 
             // We drive the execution of fixed ticks using this tick as the driving clock
             TimeElapsed += TimeSpan.FromSeconds(delta);
-            TickExecutorUtility.ExecuteFixedTicks(delta, _fixedTicks);
-            TickExecutorUtility.ExecuteVariableTick(delta, _tick);
+            TickExecutorUtility.ExecuteFixedTicks(delta, FixedTicks);
+            TickExecutorUtility.ExecuteVariableTick(delta, Tick);
             
             // Update telemetry
             (Telemetry as TelemetryTick).Broadcast(this);

@@ -8,6 +8,16 @@ namespace GGTickBase
     public interface IModuleTick : IModule
     {
         #region PROPERTIES
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        TickVariable Tick { get; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        TickFixed[] FixedTicks { get; }
 
         /// <summary>
         /// Telemetry data for this ticking module
